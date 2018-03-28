@@ -18,9 +18,6 @@ public class Runner {
 
             // 1. Create an array for PURCHASES_NUMBER purchases.
             final int PURCHASES_NUMBER = sc.nextInt();
-            if (isNumber(PURCHASES_NUMBER)) {
-                throw new RuntimeException("Invalid PURCHASES_NUMBER");
-            }
             Purchase[] purchases = new Purchase[PURCHASES_NUMBER];
 
             // 2. Initialize this array by the file data.
@@ -30,9 +27,6 @@ public class Runner {
                 int percent = sc.nextInt();
                 int day = sc.nextInt();
 
-                if (isWeekday(day)) {
-                    throw new RuntimeException("Invalid Weekday");
-                }
                 purchases[i] = new Purchase(price, percent, day);
             }
 
@@ -74,8 +68,6 @@ public class Runner {
             // 7. Find some purchase with number equaled to 5
             purchaseWithNumber(purchases);
 
-        } catch (NoSuchElementException e) {
-            System.err.println("Invalid input file");
         } catch (FileNotFoundException e) {
             System.err.println("Input file is not found");
         } finally {
@@ -83,14 +75,6 @@ public class Runner {
                 sc.close();
             }
         }
-    }
-
-    private static boolean isNumber(int PURCHASES_NUMBER) {
-        return PURCHASES_NUMBER > 10 || PURCHASES_NUMBER < 0;
-    }
-
-    private static boolean isWeekday(int day) {
-        return day > 6 || day < 0;
     }
 
     private static void purchaseWithNumber(Purchase[] purchases) {
