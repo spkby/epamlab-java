@@ -1,19 +1,13 @@
 package by.gsu.epamlab;
 
 public enum WeekDay {
-    SUNDAY(0),
-    MONDAY(1),
-    TUESDAY(2),
-    WEDNESDAY(3),
-    THURSDAY(4),
-    FRIDAY(5),
-    SATURDAY(6);
-
-    private int value;
-
-    WeekDay(int value) {
-        this.value = value;
-    }
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY;
 
     public static WeekDay valueOf(int weekDay) {
 

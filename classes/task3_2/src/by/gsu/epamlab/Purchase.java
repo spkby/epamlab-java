@@ -6,18 +6,18 @@ public class Purchase implements Comparable<Purchase> {
     public static final int PRICE = 115;
 
     private int number;
-    private double percent;
+    private int percent;
     private WeekDay weekDay;
 
     public Purchase() {}
 
-    public Purchase(int number, double percent, WeekDay weekDay) {
+    public Purchase(int number, int percent, WeekDay weekDay) {
         this.number = number;
         this.percent = percent;
         this.weekDay = weekDay;
     }
 
-    public Purchase(int number, double percent, int weekDay) {
+    public Purchase(int number, int percent, int weekDay) {
         this(number,percent,WeekDay.valueOf(weekDay));
     }
 
