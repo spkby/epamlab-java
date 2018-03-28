@@ -1,13 +1,13 @@
 package by.gsu.epamlab;
 
 public enum WeekDay {
+    SUNDAY(0),
     MONDAY(1),
     TUESDAY(2),
     WEDNESDAY(3),
     THURSDAY(4),
     FRIDAY(5),
-    SATURDAY(6),
-    SUNDAY(0);
+    SATURDAY(6);
 
     private int value;
 
@@ -17,15 +17,16 @@ public enum WeekDay {
 
     public static WeekDay valueOf(int weekDay) {
 
-        switch (weekDay){
-            case 0: return SUNDAY;
-            case 1: return MONDAY;
-            case 2: return TUESDAY;
-            case 3: return WEDNESDAY;
-            case 4: return THURSDAY;
-            case 5: return FRIDAY;
-        }
-        return SATURDAY;
+        WeekDay[] weekDays = new WeekDay[]{
+                SUNDAY,
+                MONDAY,
+                TUESDAY,
+                WEDNESDAY,
+                THURSDAY,
+                FRIDAY,
+                SATURDAY};
+
+        return weekDays[weekDay];
     }
 
     @Override
