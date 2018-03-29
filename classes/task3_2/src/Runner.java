@@ -24,7 +24,7 @@ public class Runner {
             for (int i = 0; i < PURCHASES_NUMBER; i++) {
 
                 int price = sc.nextInt();
-                int percent = sc.nextInt();
+                double percent = sc.nextDouble();
                 int day = sc.nextInt();
 
                 purchases[i] = new Purchase(price, percent, day);
@@ -58,7 +58,7 @@ public class Runner {
             }
 
             System.out.printf("Mean cost = %.3f\n", meanCost);
-            System.out.println("The total cost on Monday = " + Utils.toRublesWithTwoDigit(totalCostMonday));
+            System.out.println("The total cost on Monday = " + Purchase.toRublesWithTwoDigit(totalCostMonday));
             System.out.println("The day with the maximum cost purchase is " + maxCostDay);
 
             // 5. Sort the array by the field number in the ascending order
@@ -90,7 +90,7 @@ public class Runner {
     }
 
     private static void printPurchases(Purchase[] purchases) {
-        System.out.println(Purchase.PRODUCT_NAME + " " + Utils.toRublesWithTwoDigit(Purchase.PRICE));
+        System.out.println(Purchase.PRODUCT_NAME + " " + Purchase.toRublesWithTwoDigit(Purchase.PRICE));
         for (Purchase purchase : purchases) {
             System.out.println(purchase);
         }
