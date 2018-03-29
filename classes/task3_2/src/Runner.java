@@ -41,21 +41,23 @@ public class Runner {
             WeekDay maxCostDay = null;
 
             for (Purchase purchase : purchases) {
-                if (maxCost < purchase.getCost()) {
-                    maxCost = purchase.getCost();
+                int curCost = purchase.getCost();
+
+                if (maxCost < curCost) {
+                    maxCost = curCost;
                     maxCostDay = purchase.getWeekDay();
                 }
                 if (purchase.getWeekDay() == WeekDay.MONDAY) {
-                    totalCostMonday += purchase.getCost();
+                    totalCostMonday += curCost;
                 }
-                totalCost += purchase.getCost();
+                totalCost += curCost;
             }
 
             if (purchases.length > 0) {
                 meanCost = ((double) totalCost) / purchases.length;
             }
 
-            System.out.println("Mean cost = " + Utils.toRublesWithThreeDigit(meanCost));
+            System.out.printf("Mean cost = %.3f\n", meanCost);
             System.out.println("The total cost on Monday = " + Utils.toRublesWithTwoDigit(totalCostMonday));
             System.out.println("The day with the maximum cost purchase is " + maxCostDay);
 
