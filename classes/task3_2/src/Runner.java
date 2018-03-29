@@ -41,16 +41,16 @@ public class Runner {
             WeekDay maxCostDay = null;
 
             for (Purchase purchase : purchases) {
-                int curCost = purchase.getCost();
+                int cost = purchase.getCost();
 
-                if (maxCost < curCost) {
-                    maxCost = curCost;
+                if (maxCost < cost) {
+                    maxCost = cost;
                     maxCostDay = purchase.getWeekDay();
                 }
                 if (purchase.getWeekDay() == WeekDay.MONDAY) {
-                    totalCostMonday += curCost;
+                    totalCostMonday += cost;
                 }
-                totalCost += curCost;
+                totalCost += cost;
             }
 
             if (purchases.length > 0) {
