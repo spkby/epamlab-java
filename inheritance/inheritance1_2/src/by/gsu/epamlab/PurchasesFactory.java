@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class PurchasesFactory {
 
-    private static enum PurchaseKind {
+    private enum PurchaseKind {
         GENERAL_PURCHASE {
             Purchase getPurchase(Scanner sc) {
                 return new Purchase(sc);

@@ -23,6 +23,7 @@ public class Runner {
 
             int maxId = 0;
             Byn maxCost = new Byn(0);
+
             boolean areEqual = true;
 
             for (int i = 0; i < purchases.length; i++) {

@@ -40,16 +40,16 @@ public class Byn implements Comparable<Byn> {
         return this;
     }
 
-    public Byn mul(double k){
-        this.value = (int)Math.round((double)this.value* k);
+    public Byn mul(double k) {
+        this.value = (int) Math.round((double) this.value * k);
         return this;
     }
 
-    public Byn div(double k){
-        return mul(1.0/k);
+    public Byn div(double k) {
+        return mul(1.0 / k);
     }
 
-    public Byn div(int k){
+    public Byn div(int k) {
         return div((double) k);
     }
 
@@ -63,6 +63,47 @@ public class Byn implements Comparable<Byn> {
 
     public int getValue() {
         return value;
+    }
+
+    public enum Round {
+        TO_UP {
+            public int round(int value) {
+                return roundUp(value);
+            }
+        },
+        TO_DOWN {
+            public int round(int value) {
+                return roundDown(value);
+            }
+        },
+        TO_INTEGER {
+            public int round(int value) {
+                return roundInteger(value);
+            }
+        };
+
+        abstract int round(int value);
+    }
+
+    private static int roundUp(int value) {
+        value = roundDown(value) + 100;
+        return value;
+    }
+
+    private static int roundDown(int value) {
+        value = (value / 100) * 100;
+        return value;
+    }
+
+    private static int roundInteger(int value) {
+        int coins = value % 100;
+        value = roundDown(value);
+        coins = coins >= 50 ? 100 : 0;
+        return value + coins;
+    }
+
+    public void round(Round round) {
+        this.value = Round.valueOf(round.name()).round(this.value);
     }
 
     @Override
