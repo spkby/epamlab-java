@@ -53,7 +53,16 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn subPercents(double percents){
-        this.value -= (int)Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
+        this.value -= getPercents(percents);
+        return this;
+    }
+
+    private int getPercents(double percents) {
+        return (int)Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
+    }
+
+    public Byn addPercents(double percents){
+        this.value += getPercents(percents);
         return this;
     }
 
@@ -64,8 +73,6 @@ public class Byn implements Comparable<Byn> {
     public int getCoins() {
         return value % COINS_IN_RUB;
     }
-
-
 
     public enum Round {
         TO_UP {
