@@ -21,7 +21,7 @@ public class Byn implements Comparable<Byn> {
 
     @Override
     public String toString() {
-        return String.format("%d.%02d", getRubs(), getCoins());
+        return getRubs() + "." + value / 10 % 10 + value % 10;
     }
 
     public Byn add(Byn byn) {
@@ -52,26 +52,26 @@ public class Byn implements Comparable<Byn> {
         return div((double) k);
     }
 
-    public Byn subPercents(double percents){
+    public Byn increaseOnPercents(double percents) {
         this.value -= getPercents(percents);
         return this;
     }
 
     private int getPercents(double percents) {
-        return (int)Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
+        return (int) Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
     }
 
-    public Byn addPercents(double percents){
+    public Byn decreaseOnPercents(double percents) {
         this.value += getPercents(percents);
         return this;
     }
 
     public int getRubs() {
-        return value / COINS_IN_RUB;
+        return this.value / COINS_IN_RUB;
     }
 
     public int getCoins() {
-        return value % COINS_IN_RUB;
+        return this.value % COINS_IN_RUB;
     }
 
     public enum Round {
@@ -117,12 +117,12 @@ public class Byn implements Comparable<Byn> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Byn byn = (Byn) o;
-        return value == byn.value;
+        return this.value == byn.value;
     }
 
     @Override
     public int compareTo(Byn byn) {
-        return value - byn.value;
+        return this.value - byn.value;
     }
 
 }
