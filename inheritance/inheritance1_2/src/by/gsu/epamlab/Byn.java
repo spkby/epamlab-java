@@ -2,6 +2,9 @@ package by.gsu.epamlab;
 
 public class Byn implements Comparable<Byn> {
 
+    public static int COINS_IN_RUB = 100;
+    private static double ONE_HUNDRED_PERCENTS = 100.0;
+
     private int value;
 
     public Byn(int value) {
@@ -9,7 +12,7 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn(int rubs, int coins) {
-        this(rubs * 100 + coins);
+        this(rubs * COINS_IN_RUB + coins);
     }
 
     public Byn(Byn byn) {
@@ -18,7 +21,7 @@ public class Byn implements Comparable<Byn> {
 
     @Override
     public String toString() {
-        return String.format("%d.%02d", value / 100, value % 100);
+        return String.format("%d.%02d", getRubs(), getCoins());
     }
 
     public Byn add(Byn byn) {
@@ -49,13 +52,20 @@ public class Byn implements Comparable<Byn> {
         return div((double) k);
     }
 
+    public Byn subPercents(double percents){
+        this.value -= (int)Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
+        return this;
+    }
+
     public int getRubs() {
-        return value / 100;
+        return value / COINS_IN_RUB;
     }
 
     public int getCoins() {
-        return value % 100;
+        return value % COINS_IN_RUB;
     }
+
+
 
     public enum Round {
         TO_UP {
@@ -78,16 +88,16 @@ public class Byn implements Comparable<Byn> {
     }
 
     private static int roundUp(Byn amount) {
-        int coins = amount.getCoins() > 0 ? 100 : 0;
+        int coins = amount.getCoins() > 0 ? COINS_IN_RUB : 0;
         return roundDown(amount) + coins;
     }
 
     private static int roundDown(Byn amount) {
-        return amount.getRubs() * 100;
+        return amount.getRubs() * COINS_IN_RUB;
     }
 
     private static int roundInteger(Byn amount) {
-        int coins = amount.getCoins() >= 50 ? 100 : 0;
+        int coins = amount.getCoins() >= 50 ? COINS_IN_RUB : 0;
         return roundDown(amount) + coins;
     }
 

@@ -29,7 +29,7 @@ public class PercentDiscountPurchase extends Purchase {
     public Byn getCost() {
         Byn cost = super.getCost();
         if (NUMBER_DISCOUNT < getNumberUnits()) {
-            cost = cost.mul(1.0 - percentDiscount / 100.0);
+            cost.subPercents(percentDiscount);
         }
         return cost;
     }
