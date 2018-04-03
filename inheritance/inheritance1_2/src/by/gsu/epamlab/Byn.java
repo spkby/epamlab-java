@@ -87,7 +87,7 @@ public class Byn implements Comparable<Byn> {
 
     private static int roundUp(Byn amount) {
         int coins = amount.getCoins() > 0 ? 100 : 0;
-        return amount.getRubs() * 100 + coins;
+        return roundDown(amount) + coins;
     }
 
     private static int roundDown(Byn amount) {
@@ -96,7 +96,7 @@ public class Byn implements Comparable<Byn> {
 
     private static int roundInteger(Byn amount) {
         int coins = amount.getCoins() >= 50 ? 100 : 0;
-        return amount.getRubs() * 100 + coins;
+        return roundDown(amount) + coins;
     }
 
     public void round(Round round) {
