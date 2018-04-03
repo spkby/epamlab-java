@@ -53,6 +53,10 @@ public class Byn implements Comparable<Byn> {
         return div((double) k);
     }
 
+    public int getValue() {
+        return value;
+    }
+
     public int getRubs() {
         return value / 100;
     }
@@ -61,49 +65,42 @@ public class Byn implements Comparable<Byn> {
         return value % 100;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public enum Round {
         TO_UP {
-            public int round(int value) {
-                return roundUp(value);
+            int round(Byn amount) {
+                return roundUp(amount);
             }
         },
         TO_DOWN {
-            public int round(int value) {
-                return roundDown(value);
+            int round(Byn amount) {
+                return roundDown(amount);
             }
         },
         TO_INTEGER {
-            public int round(int value) {
-                return roundInteger(value);
+            int round(Byn amount) {
+                return roundInteger(amount);
             }
         };
 
-        abstract int round(int value);
+        abstract int round(Byn amount);
     }
 
-    private static int roundUp(int value) {
-        value = roundDown(value) + 100;
-        return value;
+    private static int roundUp(Byn amount) {
+        int coins = amount.getCoins() > 0 ? 100 : 0;
+        return amount.getRubs() * 100 + coins;
     }
 
-    private static int roundDown(int value) {
-        value = (value / 100) * 100;
-        return value;
+    private static int roundDown(Byn amount) {
+        return amount.getRubs() * 100;
     }
 
-    private static int roundInteger(int value) {
-        int coins = value % 100;
-        value = roundDown(value);
-        coins = coins >= 50 ? 100 : 0;
-        return value + coins;
+    private static int roundInteger(Byn amount) {
+        int coins = amount.getCoins() >= 50 ? 100 : 0;
+        return amount.getRubs() * 100 + coins;
     }
 
     public void round(Round round) {
-        this.value = Round.valueOf(round.name()).round(this.value);
+        this.value = round.round(this);
     }
 
     @Override
