@@ -12,8 +12,8 @@ public class Byn implements Comparable<Byn> {
         this(rubs * 100 + coins);
     }
 
-    public Byn(Byn value) {
-        this(value.getValue());
+    public Byn(Byn byn) {
+        this(byn.value);
     }
 
     @Override
@@ -22,12 +22,12 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn add(Byn byn) {
-        this.value += byn.getValue();
+        this.value += byn.value;
         return this;
     }
 
     public Byn sub(Byn byn) {
-        this.value -= byn.getValue();
+        this.value -= byn.value;
         return this;
     }
 
@@ -47,10 +47,6 @@ public class Byn implements Comparable<Byn> {
 
     public Byn div(int k) {
         return div((double) k);
-    }
-
-    private int getValue() {
-        return value;
     }
 
     public int getRubs() {
@@ -109,7 +105,7 @@ public class Byn implements Comparable<Byn> {
 
     @Override
     public int compareTo(Byn byn) {
-        return value - byn.getValue();
+        return value - byn.value;
     }
 
 }
