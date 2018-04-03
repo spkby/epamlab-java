@@ -27,6 +27,11 @@ public class PriceDiscountPurchase extends Purchase {
     @Override
     public Byn getCost() {
         Byn cost = new Byn(getPrice());
-        return cost.sub(priceDiscount).mul(getNumberUnits());
+        if (cost.compareTo(priceDiscount) > 0) {
+            cost.sub(priceDiscount).mul(getNumberUnits());
+        } else {
+            cost.sub(cost);
+        }
+        return cost;
     }
 }

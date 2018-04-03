@@ -42,7 +42,7 @@ public class Purchase {
         Purchase purchase = (Purchase) o;
 
         return productName.equals(purchase.productName) &&
-                price.getValue() == purchase.price.getValue();
+                price.equals(purchase.price);
     }
 
     public Byn getPrice() {

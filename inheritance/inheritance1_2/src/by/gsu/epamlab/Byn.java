@@ -18,11 +18,7 @@ public class Byn implements Comparable<Byn> {
 
     @Override
     public String toString() {
-        int integer = value / 100;
-        int tenths = (value % 100) / 10;
-        int hundredths = value % 10;
-
-        return integer + "." + tenths + hundredths;
+        return String.format("%d.%02d", value / 100, value % 100);
     }
 
     public Byn add(Byn byn) {
@@ -53,7 +49,7 @@ public class Byn implements Comparable<Byn> {
         return div((double) k);
     }
 
-    public int getValue() {
+    private int getValue() {
         return value;
     }
 
