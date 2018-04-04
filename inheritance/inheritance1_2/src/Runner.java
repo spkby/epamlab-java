@@ -22,7 +22,7 @@ public class Runner {
             Purchase[] purchases = new Purchase[PURCHASES_NUMBER];
 
             int maxId = 0;
-            Byn maxCost = new Byn(0);
+            Byn maxCost = new Byn(12345678);
 
             boolean areEqual = true;
 

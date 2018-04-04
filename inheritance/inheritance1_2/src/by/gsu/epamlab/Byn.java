@@ -2,26 +2,28 @@ package by.gsu.epamlab;
 
 public class Byn implements Comparable<Byn> {
 
-    public static int COINS_IN_RUB = 100;
-    private static double ONE_HUNDRED_PERCENTS = 100.0;
-
     private int value;
+
+    private static int[] tenPowD = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
 
     public Byn(int value) {
         this.value = value;
     }
 
     public Byn(int rubs, int coins) {
-        this(rubs * COINS_IN_RUB + coins);
+        this(rubs * 100 + coins);
     }
 
     public Byn(Byn byn) {
         this(byn.value);
     }
 
-    @Override
-    public String toString() {
-        return getRubs() + "." + value / 10 % 10 + value % 10;
+    public int getRubs() {
+        return this.value / 100;
+    }
+
+    public int getCoins() {
+        return this.value % 100;
     }
 
     public Byn add(Byn byn) {
@@ -39,77 +41,63 @@ public class Byn implements Comparable<Byn> {
         return this;
     }
 
+    private static int rounding(double roundingValue, Round round, int d) {
+        return (int) round.roundFunction(roundingValue / tenPowD[d]) * tenPowD[d];
+    }
+
+    public Byn mul(double k, Round round, int d) {
+        this.value = rounding(this.value * k, round, d);
+        return this;
+    }
+
+    public Byn mul(double k, int d) {
+        mul(k, Round.ROUND, d);
+        return this;
+    }
+
     public Byn mul(double k) {
-        this.value = (int) Math.round((double) this.value * k);
+        mul(k, Round.ROUND, 0);
         return this;
     }
 
-    public Byn div(double k) {
-        return mul(1.0 / k);
-    }
-
-    public Byn div(int k) {
-        return div((double) k);
-    }
-
-    public Byn increaseOnPercents(double percents) {
-        this.value -= getPercents(percents);
+    public Byn mul(double k, Round round) {
+        this.value = rounding(this.value * k, round, 0);
         return this;
     }
 
-    private int getPercents(double percents) {
-        return (int) Math.round(this.value * percents / ONE_HUNDRED_PERCENTS);
-    }
-
-    public Byn decreaseOnPercents(double percents) {
-        this.value += getPercents(percents);
+    public Byn round(Round round, int d) {
+        this.value = rounding(this.value, round, d);
         return this;
     }
 
-    public int getRubs() {
-        return this.value / COINS_IN_RUB;
+    public Byn round(Round round) {
+        this.value = rounding(value, round, 0);
+        return this;
     }
 
-    public int getCoins() {
-        return this.value % COINS_IN_RUB;
+    public Byn round(int d) {
+        this.value = rounding(this.value, Round.ROUND, d);
+        return this;
     }
 
     public enum Round {
-        TO_UP {
-            int round(Byn amount) {
-                return roundUp(amount);
+        CEIL {
+            double roundFunction(double d) {
+                return Math.ceil(d);
             }
         },
-        TO_DOWN {
-            int round(Byn amount) {
-                return roundDown(amount);
+        FLOOR {
+            double roundFunction(double d) {
+                return Math.floor(d);
             }
         },
-        TO_INTEGER {
-            int round(Byn amount) {
-                return roundInteger(amount);
+        ROUND {
+            double roundFunction(double d) {
+                return Math.round(d);
             }
         };
 
-        abstract int round(Byn amount);
-    }
-
-    private static int roundUp(Byn amount) {
-        int coins = amount.getCoins() > 0 ? COINS_IN_RUB : 0;
-        return roundDown(amount) + coins;
-    }
-
-    private static int roundDown(Byn amount) {
-        return amount.getRubs() * COINS_IN_RUB;
-    }
-
-    private static int roundInteger(Byn amount) {
-        int coins = amount.getCoins() >= 50 ? COINS_IN_RUB : 0;
-        return roundDown(amount) + coins;
-    }
-
-    public void round(Round round) {
-        this.value = round.round(this);
+        abstract double roundFunction(double d);
     }
 
     @Override
@@ -125,4 +113,8 @@ public class Byn implements Comparable<Byn> {
         return this.value - byn.value;
     }
 
+    @Override
+    public String toString() {
+        return getRubs() + "." + value / 10 % 10 + value % 10;
+    }
 }
