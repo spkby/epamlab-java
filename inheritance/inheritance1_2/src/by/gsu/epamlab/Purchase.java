@@ -27,12 +27,12 @@ public class Purchase {
     }
 
     protected String fieldsToString() {
-        return "";
+        return  productName + ";" + price + ";" + numberUnits;
     }
 
     @Override
     public String toString() {
-        return productName + ";" + price + ";" + numberUnits + fieldsToString() + ";" + getCost();
+        return fieldsToString() + ";" + getCost();
     }
 
     @Override

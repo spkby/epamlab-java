@@ -22,8 +22,9 @@ public class PercentDiscountPurchase extends Purchase {
 
     @Override
     protected String fieldsToString() {
-        return ";" + percentDiscount;
+        return  super.fieldsToString() + ";" + percentDiscount;
     }
+
 
     @Override
     public Byn getCost() {

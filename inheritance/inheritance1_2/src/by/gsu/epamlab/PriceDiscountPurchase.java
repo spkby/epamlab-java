@@ -21,8 +21,9 @@ public class PriceDiscountPurchase extends Purchase {
 
     @Override
     protected String fieldsToString() {
-        return ";" + priceDiscount;
+        return  super.fieldsToString() + ";" + priceDiscount;
     }
+
 
     @Override
     public Byn getCost() {
