@@ -21,18 +21,13 @@ public class PriceDiscountPurchase extends Purchase {
 
     @Override
     protected String fieldsToString() {
-        return  super.fieldsToString() + ";" + priceDiscount;
+        return super.fieldsToString() + ";" + priceDiscount;
     }
 
 
     @Override
     public Byn getCost() {
         Byn cost = new Byn(getPrice());
-        if (cost.compareTo(priceDiscount) > 0) {
-            cost.sub(priceDiscount).mul(getNumberUnits());
-        } else {
-            cost.sub(cost);
-        }
-        return cost;
+        return cost.sub(priceDiscount).mul(getNumberUnits());
     }
 }
