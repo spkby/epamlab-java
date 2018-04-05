@@ -43,9 +43,7 @@ public class Runner {
             System.out.println("The purchase with maximum cost: " + purchases[maxId]);
 
             if (areEqual) {
-                System.out.println("Whether all purchases are equal");
-            } else {
-                System.out.println("Not all purchases are equal");
+                System.out.println("All purchases are equal");
             }
 
         } catch (FileNotFoundException e) {
