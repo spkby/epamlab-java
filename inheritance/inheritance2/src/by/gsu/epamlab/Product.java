@@ -2,20 +2,20 @@ package by.gsu.epamlab;
 
 public class Product {
 
-    final private String productname;
+    final private String name;
     final private Byn price;
 
     public Product() {
         this(null, null);
     }
 
-    public Product(String productname, Byn price) {
-        this.productname = productname;
+    public Product(String name, Byn price) {
+        this.name = name;
         this.price = price;
     }
 
-    public String getProductname() {
-        return productname;
+    public String getName() {
+        return name;
     }
 
     public Byn getPrice() {
@@ -24,6 +24,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return productname + ";" + price;
+        return name + ";" + price;
     }
 }

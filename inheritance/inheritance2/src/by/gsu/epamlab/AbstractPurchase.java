@@ -30,8 +30,7 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase> {
     }
 
     protected Byn calcCost(){
-        Byn cost = new Byn(product.getPrice());
-        return cost.mul(numberUnits);
+        return product.getPrice().mul(numberUnits);
     }
 
     public Byn getCost() {
@@ -52,3 +51,5 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase> {
     }
 
 }
+
+

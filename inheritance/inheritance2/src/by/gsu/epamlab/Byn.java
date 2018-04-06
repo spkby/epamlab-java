@@ -12,10 +12,6 @@ public class Byn implements Comparable<Byn> {
         this(rubs * 100 + coins);
     }
 
-    public Byn(Byn byn) {
-        this(byn.value);
-    }
-
     public int getRubs() {
         return this.value / 100;
     }
@@ -43,58 +39,47 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn add(Byn byn) {
-        this.value += byn.value;
-        return this;
+        return new Byn(this.value + byn.value);
     }
 
     public Byn sub(Byn byn) {
-        this.value -= byn.value;
-        return this;
+        return new Byn(this.value - byn.value);
     }
 
     public Byn mul(int k) {
-        this.value *= k;
-        return this;
+        return new Byn(this.value * k);
     }
 
     public Byn mul(double k, Round round, int digits) {
-        this.value = round.rounding(this.value * k, digits);
-        return this;
+        return new Byn(round.rounding(this.value * k, digits));
     }
 
     public Byn mul(double k, int digits) {
-        mul(k, Round.ROUND, digits);
-        return this;
+        return mul(k, Round.ROUND, digits);
     }
 
     public Byn mul(double k) {
-        mul(k, Round.ROUND, 0);
-        return this;
+        return mul(k, Round.ROUND, 0);
     }
 
     public Byn mul(double k, Round round) {
-        mul(k, round, 0);
-        return this;
+        return mul(k, round, 0);
     }
 
     public Byn round(Round round) {
-        round(round,0);
-        return this;
+        return round(round,0);
     }
 
     public Byn round(int digits) {
-        round(Round.ROUND,digits);
-        return this;
+        return round(Round.ROUND,digits);
     }
 
     public Byn round() {
-        round(Round.ROUND,0);
-        return this;
+        return round(Round.ROUND,0);
     }
 
     public Byn round(Round round, int digits) {
-        this.value = round.rounding(this.value, digits);
-        return this;
+        return new Byn(round.rounding(this.value, digits));
     }
 
     public static enum Round {
@@ -116,9 +101,8 @@ public class Byn implements Comparable<Byn> {
 
         abstract double roundFunction(double roundingValue);
 
-        private int[] tenPowD = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
-
         private int rounding(double roundingValue, int digits) {
+            int[] tenPowD = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
             return (int) roundFunction(roundingValue / tenPowD[digits]) * tenPowD[digits];
         }
     }

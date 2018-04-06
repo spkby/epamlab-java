@@ -1,7 +1,5 @@
 package by.gsu.epamlab;
 
-import java.util.Scanner;
-
 public class PriceDiscountPurchase extends AbstractPurchase {
 
     private Byn priceDiscount;
@@ -21,7 +19,6 @@ public class PriceDiscountPurchase extends AbstractPurchase {
 
     @Override
     protected Byn calcCost() {
-        Byn cost = new Byn(getProduct().getPrice());
-        return cost.sub(priceDiscount).mul(getNumberUnits());
+        return getProduct().getPrice().sub(priceDiscount).mul(getNumberUnits());
     }
 }

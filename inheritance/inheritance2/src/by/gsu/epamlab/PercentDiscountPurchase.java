@@ -1,7 +1,5 @@
 package by.gsu.epamlab;
 
-import java.util.Scanner;
-
 public class PercentDiscountPurchase extends AbstractPurchase {
 
     private double percentDiscount;
@@ -24,7 +22,7 @@ public class PercentDiscountPurchase extends AbstractPurchase {
     protected Byn calcCost() {
         Byn cost = super.calcCost();
         if (NUMBER_DISCOUNT < getNumberUnits()) {
-            cost.mul(1.0 - percentDiscount / 100.0);
+            cost = cost.mul(1.0 - percentDiscount / 100.0);
         }
         return cost;
     }
