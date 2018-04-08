@@ -2,10 +2,11 @@ package by.gsu.epamlab;
 
 public abstract class AbstractPurchase implements Comparable<AbstractPurchase> {
 
-    private Product product;
+    private final Product product;
     private int numberUnits;
 
     public AbstractPurchase() {
+        this(null,0);
     }
 
     public AbstractPurchase(Product product, int numberUnits) {
@@ -15,10 +16,6 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase> {
 
     public Product getProduct() {
         return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public int getNumberUnits() {

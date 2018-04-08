@@ -19,6 +19,6 @@ public class PriceDiscountPurchase extends AbstractPurchase {
 
     @Override
     protected Byn calcCost() {
-        return getProduct().getPrice().sub(priceDiscount).mul(getNumberUnits());
+        return super.calcCost().sub(priceDiscount.mul(getNumberUnits()));
     }
 }

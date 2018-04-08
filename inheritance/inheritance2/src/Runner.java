@@ -7,16 +7,16 @@ public class Runner {
     public static void main(String[] args) {
 
         // 1. Create the unique product for purchasing.
-        final Product milk = new Product("Milk", new Byn(234));
+        final Product MILK = new Product("Milk", new Byn(234));
 
         // 2. Create an array for 6 objects
         AbstractPurchase[] purchases = new AbstractPurchase[]{
-                new TransportExpensesPurchase(milk, 7, 753),
-                new PercentDiscountPurchase(milk, 8, 4.12),
-                new PriceDiscountPurchase(milk, 6, 23),
-                new PercentDiscountPurchase(milk, 15, 2.56),
-                new TransportExpensesPurchase(milk, 1, 123),
-                new PriceDiscountPurchase(milk, 3, 55)
+                new TransportExpensesPurchase(MILK, 7, 753),
+                new PercentDiscountPurchase(MILK, 8, 4.12),
+                new PriceDiscountPurchase(MILK, 6, 23),
+                new PercentDiscountPurchase(MILK, 15, 2.56),
+                new TransportExpensesPurchase(MILK, 1, 123),
+                new PriceDiscountPurchase(MILK, 3, 55)
         };
 
         // 3. Print the array content to the console
