@@ -3,7 +3,7 @@ package by.gsu.epamlab;
 public class PercentDiscountPurchase extends AbstractPurchase {
 
     private double percentDiscount;
-    private static int NUMBER_DISCOUNT = 10;
+    private final static int NUMBER_DISCOUNT = 10;
 
     public PercentDiscountPurchase() {
     }
@@ -19,11 +19,10 @@ public class PercentDiscountPurchase extends AbstractPurchase {
     }
 
     @Override
-    protected Byn calcCost() {
-        Byn cost = super.calcCost();
+    protected Byn calcCost(Byn baseCost) {
         if (NUMBER_DISCOUNT < getNumberUnits()) {
-            cost = cost.mul(1.0 - percentDiscount / 100.0);
+            baseCost.mul(1.0 - percentDiscount / 100.0);
         }
-        return cost;
+        return baseCost;
     }
 }

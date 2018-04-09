@@ -18,7 +18,7 @@ public class TransportExpensesPurchase extends AbstractPurchase {
     }
 
     @Override
-    protected Byn calcCost() {
-        return super.calcCost().add(transportExpenses);
+    protected Byn calcCost(Byn baseCost) {
+        return baseCost.add(transportExpenses);
     }
 }

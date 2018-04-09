@@ -26,12 +26,10 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase> {
         this.numberUnits = numberUnits;
     }
 
-    protected Byn calcCost(){
-        return product.getPrice().mul(numberUnits);
-    }
+    protected abstract Byn calcCost(Byn baseCost);
 
     public Byn getCost() {
-        return calcCost().round(Byn.Round.FLOOR, 2);
+        return calcCost(product.getPrice().mul(numberUnits)).round(Byn.Round.FLOOR, 2);
     }
 
     protected String fieldsToString() {
