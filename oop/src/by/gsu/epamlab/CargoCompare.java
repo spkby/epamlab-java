@@ -4,13 +4,39 @@ import java.util.Comparator;
 
 public class CargoCompare<Cargo> implements Comparator<Cargo> {
 
-    @Override
-    public int compare(Cargo a, Cargo b) {
+    enum CargoType {
+        PASSENGER {
+            int getRank() {
+                return 1;
+            }
+        },
+        CONTAINER {
+            int getRank() {
+                return 2;
+            }
+        },
+        PLATFORM {
+            int getRank() {
+                return 3;
+            }
+        },
+        TANK {
+            int getRank() {
+                return 4;
+            }
+        };
 
-        return getCateg(a) - getCateg(b);
+        abstract int getRank();
     }
 
-    private int getCateg(Cargo cargo) {
+    @Override
+    public int compare(Cargo a, Cargo b) {
+        return CargoType.valueOf(a.getClass().getSimpleName().toUpperCase()).getRank()
+                - CargoType.valueOf(b.getClass().getSimpleName().toUpperCase()).getRank();
+    }
+
+/*
+    private int getRank(Cargo cargo) {
         int categ = 0;
         if (cargo instanceof Passenger) {
             categ = 1;
@@ -23,4 +49,5 @@ public class CargoCompare<Cargo> implements Comparator<Cargo> {
         }
         return categ;
     }
+*/
 }
