@@ -1,6 +1,6 @@
 package by.gsu.epamlab;
 
-public class Passenger implements Cargo {
+public class Passenger implements Weight {
 
     private String name;
     private int mass;
@@ -15,7 +15,7 @@ public class Passenger implements Cargo {
     }
 
     @Override
-    public int getMass() {
+    public int getWeight() {
         return this.mass;
     }
 
