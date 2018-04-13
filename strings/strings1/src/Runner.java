@@ -24,8 +24,6 @@ public class Runner {
             double result = 0.0;
             int errorLines = 0;
 
-            boolean isFirst = true;
-
             while (sc.hasNext()) {
 
                 String line = sc.next();
@@ -38,7 +36,7 @@ public class Runner {
                 try {
                     index = Integer.parseInt(elements[0]);
 
-                    if (index < 0 || index>=elements.length){
+                    if (index < 0 || index >= elements.length) {
                         errorLines++;
                         continue;
                     }
@@ -51,7 +49,7 @@ public class Runner {
 
                 result += number;
 
-                if (!isFirst) {
+                if (resultLine.length() > 0) {
                     if (number < 0) {
                         element = MINUS + number * -1;
                     } else {
@@ -59,8 +57,8 @@ public class Runner {
                     }
                 } else {
                     element = Double.toString(number);
-                    isFirst = false;
                 }
+
                 resultLine.append(element);
             }
 
