@@ -3,8 +3,8 @@ package by.gsu.epamlab;
 public class TankCargo extends AbstractCargo {
 
     final private Material material;
-    private int radius;
-    private int height;
+    final private int radius;
+    final private int height;
 
     public TankCargo() {
         this(0, 0, 0, null);

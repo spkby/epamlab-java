@@ -2,8 +2,8 @@ package by.gsu.epamlab;
 
 public class Passenger implements Weight {
 
-    private String name;
-    private int mass;
+    final private String name;
+    final private int mass;
 
     public Passenger() {
         this(null,0);

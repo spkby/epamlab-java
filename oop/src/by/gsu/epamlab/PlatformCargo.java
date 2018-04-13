@@ -4,7 +4,7 @@ public class PlatformCargo extends AbstractCargo {
 
     private static final int MASS_PLATFORM = 0;
 
-    private int weightCargo;
+    final private int weightCargo;
 
     public PlatformCargo(int weightCargo) {
         super(MASS_PLATFORM);
