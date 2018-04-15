@@ -12,7 +12,7 @@ public class Runner {
         final String INPUT_CSV = "src/in.csv";
         final String PLUS = " + ";
         final String MINUS = " - ";
-        final int PLUS_LENGTH = PLUS.length();
+        final int NEGATIVE_NUMBER = -1;
 
         Scanner sc = null;
 
@@ -29,7 +29,6 @@ public class Runner {
                 String line = sc.next();
                 String[] elements = line.split(";");
 
-                String element;
                 int index;
                 double number;
 
@@ -48,10 +47,11 @@ public class Runner {
                 }
 
                 result += number;
+                String element;
 
                 if (resultLine.length() > 0) {
                     if (number < 0) {
-                        element = MINUS + number * -1;
+                        element = MINUS + number * NEGATIVE_NUMBER;
                     } else {
                         element = PLUS + number;
                     }
