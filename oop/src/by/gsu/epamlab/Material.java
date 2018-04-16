@@ -2,8 +2,8 @@ package by.gsu.epamlab;
 
 public class Material {
 
-    final String name;
-    final int desity;
+    private final String name;
+    private final int desity;
 
     public Material(String name, int desity) {
         this.name = name;
