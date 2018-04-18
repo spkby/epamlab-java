@@ -11,13 +11,13 @@ public class Runner {
         double result = 0.0;
         int errors = 0;
 
+
+        final String PATTERN_VALIDATION = "(^[0]|[^0-9]|^$)";
+        final String PATTERN_FOR_INDEX = "[0-9]+";
+
         final String KEY_INDEX = "index";
         final String KEY_VALUE = "value";
         final int KEY_INDEX_LENGTH = KEY_INDEX.length();
-
-        Pattern patternValidation = Pattern.compile("(^[0]|[^0-9]|^$)");
-        Pattern patternIndex = Pattern.compile("[0-9]+");
-        Matcher matcher;
 
         try {
             ResourceBundle rb = ResourceBundle.getBundle("in");
@@ -28,20 +28,22 @@ public class Runner {
 
                 if (key.substring(0, KEY_INDEX_LENGTH).equals(KEY_INDEX)) {
 
-                    matcher = patternValidation.matcher(key.substring(KEY_INDEX_LENGTH));
+                    Pattern pattern = Pattern.compile(PATTERN_VALIDATION);
+                    Matcher matcher = pattern.matcher(key.substring(KEY_INDEX_LENGTH));
                     if (matcher.find()) {
                         errors++;
                         continue;
                     }
 
-                    matcher = patternValidation.matcher(rb.getString(key));
+                    matcher = pattern.matcher(rb.getString(key));
                     if (matcher.find()) {
                         errors++;
                         continue;
                     }
 
                     StringBuilder index = new StringBuilder();
-                    matcher = patternIndex.matcher(key + rb.getString(key));
+                    pattern = Pattern.compile(PATTERN_FOR_INDEX);
+                    matcher = pattern.matcher(key + rb.getString(key));
                     while (matcher.find()) {
                         index.append(matcher.group());
                     }
