@@ -9,10 +9,12 @@ public class AmountParse extends AbstractParse {
         super(line);
     }
 
-    private static final String REGEX_AMOUNT = "(^|\\s)(\\d(\\d|\\s|)+\\d)(\\s+[b])";
+    private static final String REGEX_AMOUNT = "\\d+(\\s+\\d{3})*\\s+[b]";
     private static final String REGEX_SPACES = "\\s+";
     private static final String SPACE = " ";
     private static final String NO_SPACE = "";
+    private static final String SPACE_B = " b";
+    private static final int LENGTH_SPACE_B = SPACE_B.length();
 
     @Override
     public String parse() {
@@ -23,8 +25,10 @@ public class AmountParse extends AbstractParse {
         Matcher matcher = pattern.matcher(line);
 
         while (matcher.find()) {
-            String oldAmount = matcher.group(2);
-            String newAmount = oldAmount.replaceAll(REGEX_SPACES, NO_SPACE);
+            StringBuilder oldAmount = new StringBuilder(matcher.group());
+            oldAmount.delete(oldAmount.length() - LENGTH_SPACE_B, oldAmount.length());
+
+            String newAmount = Pattern.compile(REGEX_SPACES).matcher(oldAmount).replaceAll(NO_SPACE);
             line = line.replace(oldAmount, newAmount);
         }
 
