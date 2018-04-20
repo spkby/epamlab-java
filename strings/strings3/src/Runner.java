@@ -1,4 +1,4 @@
-import by.gsu.epamlab.AbstractParse;
+import by.gsu.epamlab.Parse;
 import by.gsu.epamlab.AmountParse;
 import by.gsu.epamlab.DateParse;
 
@@ -8,33 +8,30 @@ public class Runner {
 
     private static final String INPUT_FILE = "src/in.txt";
     private static final String OUTPUT_FILE = "src/out.txt";
-    private static final String END_LINE = "\n";
+
+    private static final String REGEX_SPACES = "\\s+";
+    private static final String SPACE = " ";
+
 
     public static void main(String[] args) {
 
-        StringBuilder outLines = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(INPUT_FILE));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_FILE))) {
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(INPUT_FILE))) {
-
-            String line = null;
+            String line;
 
             while ((line = reader.readLine()) != null) {
-                AbstractParse amount = new AmountParse(line);
-                line = amount.parse();
+                Parse amount = new AmountParse();
+                Parse date = new DateParse();
 
-                AbstractParse date = new DateParse(line);
-                line = date.parse();
+                line = Parse.replaceAll(line, REGEX_SPACES, SPACE);
 
-                outLines.append(line).append(END_LINE);
+                line = date.format(amount.format(line));
+
+                writer.write(line + System.getProperty("line.separator"));
             }
         } catch (IOException e) {
-            System.err.println("Error read from file");
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_FILE))) {
-            writer.write(outLines.toString());
-        } catch (IOException e) {
-            System.err.println("Error write to file");
+            System.err.println("Error work this file");
         }
     }
 }
