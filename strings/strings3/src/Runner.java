@@ -16,7 +16,7 @@ public class Runner {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(INPUT_FILE))) {
 
-            String line = null;
+            String line;
 
             while ((line = reader.readLine()) != null) {
                 AbstractParse amount = new AmountParse(line);
