@@ -8,7 +8,7 @@ public class AmountParse extends Parse {
         super(REGEX_AMOUNT);
     }
 
-    private static final String REGEX_AMOUNT = "\\s+(\\d+(\\s+\d{3})*)\\s+[blr|belarusian]";
+    private static final String REGEX_AMOUNT = "\\s+(\\d+(\\s+\\d{3})*)\\s+[blr|belarusian]";
     private static final String REGEX_SPACES = "\\s+";
     private static final String NO_SPACE = "";
     private static final int GROUP = 1;
