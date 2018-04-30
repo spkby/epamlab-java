@@ -1,12 +1,11 @@
 package by.gsu.epamlab;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class DateParse extends AbstractParse {
+public class DateParse extends Parse {
 
-    public DateParse(String line) {
-        super(line);
+    public DateParse() {
+        super(REGEX_DATE);
     }
 
     private static final String[] months = new String[]{
@@ -21,25 +20,24 @@ public class DateParse extends AbstractParse {
     private static final String REGEX_DATE_SLASH = "([0-3]?[0-9]\\/[0-1]?[0-9]\\/(?:[0-9]{2})?[0-9]{2})";
     private static final String REGEX_DATE_HYPHEN = "([0-3]?[0-9]\\-[0-1]?[0-9]\\-(?:[0-9]{2})?[0-9]{2})";
 
+    private static final String REGEX_DATE = REGEX_DATE_HYPHEN + "|" + REGEX_DATE_POINT + "|" + REGEX_DATE_SLASH;
+
+    private static final int GROUP = 0;
+
     @Override
-    public String parse() {
+    protected String format(Matcher matcher) {
 
-        String line = getLine();
+        String oldDate = matcher.group();
+        String[] strings = oldDate.split(REGEX_DATE_DELIMITER);
+        String month = months[Integer.parseInt(strings[1])];
+        String day = Integer.toString(Integer.parseInt(strings[0]));
+        String year = strings[2].length() > 2 ? strings[2] : DATE_YEAR_CENTURY + strings[2];
 
-        Pattern pattern = Pattern.compile(REGEX_DATE_HYPHEN + "|" + REGEX_DATE_POINT + "|" + REGEX_DATE_SLASH);
-        Matcher matcher = pattern.matcher(line);
+        return month + " " + day + ", " + year;
+    }
 
-        while (matcher.find()) {
-            String oldDate = matcher.group();
-
-            String[] strings = oldDate.split(REGEX_DATE_DELIMITER);
-            String month = months[Integer.parseInt(strings[1])];
-            String day = Integer.toString(Integer.parseInt(strings[0]));
-            String year = strings[2].length() > 2 ? strings[2] : DATE_YEAR_CENTURY + strings[2];
-
-            line = getLine().replace(oldDate, month + " " + day + ", " + year);
-        }
-
-        return line;
+    @Override
+    protected int group() {
+        return GROUP;
     }
 }
