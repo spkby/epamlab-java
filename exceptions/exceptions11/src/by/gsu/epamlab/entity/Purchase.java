@@ -2,9 +2,9 @@ package by.gsu.epamlab.entity;
 
 import java.util.Formatter;
 
-public class Purchase {
+public class Purchase implements Comparable<Purchase>{
 
-    public static final String HYPHEN = "-";
+    private static final String HYPHEN = "-";
     private String product;
     private Byn price;
     private int number;
@@ -51,6 +51,10 @@ public class Purchase {
 
         return product.equals(purchase.product) &&
                 price.equals(purchase.price);
+    }
+
+    public int compareTo(Purchase purchase){
+        return purchase.getCost().compareTo(getCost());
     }
 
     public Byn getPrice() {

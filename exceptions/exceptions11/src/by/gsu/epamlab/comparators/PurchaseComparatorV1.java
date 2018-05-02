@@ -1,13 +1,16 @@
 package by.gsu.epamlab.comparators;
 
+import by.gsu.epamlab.entity.PriceDiscountPurchase;
 import by.gsu.epamlab.entity.Purchase;
 
-import java.util.Comparator;
-
-public class PurchaseComparatorV1 implements Comparator<Purchase> {
+public class PurchaseComparatorV1 extends AbstractPurchaseComparator {
 
     @Override
-    public int compare(Purchase o1, Purchase o2) {
-        return 0;
+    protected int getId(Purchase purchase) {
+        if (purchase instanceof PriceDiscountPurchase) {
+            return PRICE_DISCOUNT_PURCHASE_ID;
+        } else {
+            return PURCHASE_ID;
+        }
     }
 }

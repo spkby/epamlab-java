@@ -1,7 +1,4 @@
-package by.gsu.epamlab;
-
-import by.gsu.epamlab.entity.PriceDiscountPurchase;
-import by.gsu.epamlab.entity.Purchase;
+package by.gsu.epamlab.entity;
 
 import java.util.Scanner;
 

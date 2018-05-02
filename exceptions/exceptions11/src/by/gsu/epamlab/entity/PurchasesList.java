@@ -1,7 +1,4 @@
-package by.gsu.epamlab;
-
-import by.gsu.epamlab.entity.Byn;
-import by.gsu.epamlab.entity.Purchase;
+package by.gsu.epamlab.entity;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -41,6 +38,10 @@ public class PurchasesList {
         }
     }
 
+    public int size() {
+        return purchases.size();
+    }
+
     public void printList() {
 
         System.out.printf("%-6s %5s %5s %5s %5s\n", "Name", "Price", "Number", "Discount", "Cost");
@@ -62,31 +63,59 @@ public class PurchasesList {
     }
 
     public void insert(int index, Purchase purchase) {
-        if (isIndex(index)) {
+        if (isInvalidIndex(index)) {
             index = purchases.size() - 1;
         }
         purchases.add(index, purchase);
     }
 
-    private boolean isIndex(int index) {
-        return index < 0 || index > purchases.size();
+    private boolean isInvalidIndex(int index) {
+        return index < 0 || index >= purchases.size();
     }
 
     public void delete(int index) {
-        if (isIndex(index)) {
+        if (isInvalidIndex(index)) {
+            System.err.println("Error Deletion: invalid index");
             return;
         }
         purchases.remove(index);
     }
 
-    public void sort(Comparator<Purchase> comparator){
+    public Purchase getPurchaseByIndex(int index) {
+
+        if (isInvalidIndex(index)) {
+            System.err.println("Error get Purchase: invalid index");
+            return null;
+        }
+
+        return purchases.get(index);
+    }
+
+    public void sort(Comparator<Purchase> comparator) {
         purchases.sort(comparator);
     }
 
-    public int search(){
+    public int search(String productName, Byn price, int numberUnits) {
+        return search(productName, price, numberUnits, null);
+    }
 
-        //Collections.binarySearch(purchases,new Purchase(null,1,1));
+    public int search(Purchase purchase) {
+        return Collections.binarySearch(purchases, purchase, Collections.reverseOrder());
+    }
 
-        return 0;
+    public int search(String productName, Byn price, int numberUnits, Byn discount) {
+
+        int priceCoins = price.getRubs() * 100 + price.getCoins();
+
+        Purchase purchase;
+
+        if (discount != null) {
+            int discountCoins = discount.getRubs() * 100 + discount.getCoins();
+            purchase = new PriceDiscountPurchase(productName, priceCoins, numberUnits, discountCoins);
+        } else {
+            purchase = new Purchase(productName, priceCoins, numberUnits);
+        }
+
+        return search(purchase);
     }
 }
