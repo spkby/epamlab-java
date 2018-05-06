@@ -6,9 +6,19 @@ public class Runner {
 
     public static void main(String[] args) {
 
-        final String inFile = args[0];
-        final String addonFile = args[1];
-        final String comparatorVersion = args[2];
+        final String inFile;
+        final String addonFile;
+        final String comparatorVersion;
+
+        try {
+            inFile = args[0];
+            addonFile = args[1];
+            comparatorVersion = args[2];
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            System.err.println("Error arguments");
+            return;
+        }
 
         //create an instance
         PurchasesList listIn = new PurchasesList(inFile);
