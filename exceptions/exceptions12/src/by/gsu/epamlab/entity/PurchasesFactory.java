@@ -34,18 +34,12 @@ public class PurchasesFactory {
                 throw new IllegalArgumentException("empty price");
             } else {
                 price = Integer.parseInt(elements[1]);
-                if (price <= 0) {
-                    throw new IllegalArgumentException("non positive value " + price + " in price");
-                }
             }
 
             if (elements[2].isEmpty()) {
                 throw new IllegalArgumentException("empty number");
             } else {
                 number = Integer.parseInt(elements[2]);
-                if (number <= 0) {
-                    throw new IllegalArgumentException("non positive value " + number + " in number");
-                }
             }
 
             if (elements.length == 4) {
@@ -53,9 +47,6 @@ public class PurchasesFactory {
                     throw new IllegalArgumentException("empty discount");
                 } else {
                     discount = Integer.parseInt(elements[3]);
-                    if (discount <= 0) {
-                        throw new IllegalArgumentException("non positive value " + discount + " in discount");
-                    }
                 }
                 if(price <= discount){
                     throw new IllegalArgumentException("discount more or equal price");

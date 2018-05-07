@@ -8,6 +8,8 @@ public class PurchasesList {
 
     private static final String path = "src/";
     private static final String ext = ".csv";
+    private static final String FORMATTER_HEAD = "%-6s %5s %5s %5s %5s\n";
+    private static final String FORMATTER_TOTALCOST = "%23s";
 
     private List<Purchase> purchases;
 
@@ -44,11 +46,11 @@ public class PurchasesList {
 
     public void printList() {
 
-        System.out.printf("%-6s %5s %5s %5s %5s\n", "Name", "Price", "Number", "Discount", "Cost");
+        System.out.printf(FORMATTER_HEAD, "Name", "Price", "Number", "Discount", "Cost");
         for (Purchase purchase : purchases) {
             System.out.println(purchase.print());
         }
-        System.out.printf("Total cost %23s\n", getTotalCost());
+        System.out.printf("Total cost " + FORMATTER_TOTALCOST + "\n", getTotalCost());
     }
 
     public Byn getTotalCost() {

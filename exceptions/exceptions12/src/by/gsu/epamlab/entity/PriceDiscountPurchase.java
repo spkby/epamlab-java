@@ -1,6 +1,6 @@
 package by.gsu.epamlab.entity;
 
-import java.util.Formatter;
+import by.gsu.epamlab.exceptions.NonpositiveArgumentException;
 
 public class PriceDiscountPurchase extends Purchase {
 
@@ -12,8 +12,12 @@ public class PriceDiscountPurchase extends Purchase {
     }
 
     private void setPriceDiscount(int priceDiscount) {
+        setDiscount(priceDiscount);
+    }
+
+    private void setDiscount(int priceDiscount) {
         if (priceDiscount <= 0) {
-            throw new IllegalArgumentException("non positive value " + priceDiscount + " in discount");
+            throw new NonpositiveArgumentException(priceDiscount, "discount");
         }
         this.priceDiscount = new Byn(priceDiscount);
     }
