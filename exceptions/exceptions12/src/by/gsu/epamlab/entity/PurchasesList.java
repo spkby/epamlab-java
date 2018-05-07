@@ -1,5 +1,8 @@
 package by.gsu.epamlab.entity;
 
+import by.gsu.epamlab.comparators.PurchaseComparatorBuilder;
+import by.gsu.epamlab.exceptions.CsvLineException;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
@@ -8,13 +11,23 @@ public class PurchasesList {
 
     private static final String path = "src/";
     private static final String ext = ".csv";
-    private static final String FORMATTER_HEAD = "%-6s %5s %5s %5s %5s\n";
-    private static final String FORMATTER_TOTALCOST = "%23s";
+    private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final String FORMATTER_TOTALCOST = "%30s";
+    private static final String TOTAL_COST = "Total cost ";
+
+    private boolean isSorted = false;
 
     private List<Purchase> purchases;
 
+    private final Comparator<Purchase> comparator;
+
+    {
+        this.comparator = PurchaseComparatorBuilder.getPurchaseComparator();
+    }
+
     public PurchasesList() {
         purchases = new ArrayList<>();
+
     }
 
     public PurchasesList(String fileName) {
@@ -25,7 +38,12 @@ public class PurchasesList {
             scanner = new Scanner(new FileReader(path + fileName + ext));
 
             while (scanner.hasNext()) {
-                Purchase purchase = PurchasesFactory.getPurchaseFromFactory(scanner);
+                Purchase purchase = null;
+                try {
+                    purchase = PurchasesFactory.getPurchaseFromFactory(scanner.next());
+                } catch (CsvLineException e) {
+                    System.err.println(e);
+                }
                 if (purchase != null) {
                     purchases.add(purchase);
                 }
@@ -44,13 +62,29 @@ public class PurchasesList {
         return purchases.size();
     }
 
-    public void printList() {
+    public String toTable() {
 
-        System.out.printf(FORMATTER_HEAD, "Name", "Price", "Number", "Discount", "Cost");
+        Formatter formatter = new Formatter();
+        StringBuilder builder = new StringBuilder();
+
+        String format = TableRows.NAME.get() +
+                TableRows.PRICE.get() +
+                TableRows.NUMBER.get() +
+                TableRows.DISCOUNT.get() +
+                TableRows.COST.get();
+        formatter.format(format, TableRows.NAME, TableRows.PRICE, TableRows.NUMBER,
+                TableRows.DISCOUNT, TableRows.COST);
+        builder.append(formatter).append(NEW_LINE);
+
         for (Purchase purchase : purchases) {
-            System.out.println(purchase.print());
+            builder.append(purchase.print()).append(NEW_LINE);
         }
-        System.out.printf("Total cost " + FORMATTER_TOTALCOST + "\n", getTotalCost());
+
+        formatter = new Formatter();
+        formatter.format(TOTAL_COST + FORMATTER_TOTALCOST + NEW_LINE, getTotalCost());
+        builder.append(formatter);
+
+        return builder.toString();
     }
 
     public Byn getTotalCost() {
@@ -65,59 +99,56 @@ public class PurchasesList {
     }
 
     public void insert(int index, Purchase purchase) {
-        if (isInvalidIndex(index)) {
-            index = purchases.size() - 1;
-        }
-        purchases.add(index, purchase);
-    }
-
-    private boolean isInvalidIndex(int index) {
-        return index < 0 || index >= purchases.size();
-    }
-
-    public void delete(int index) {
-        if (isInvalidIndex(index)) {
-            System.err.println("Error Deletion: invalid index");
+        if (purchase == null) {
             return;
         }
-        purchases.remove(index);
+        if (isCorrectIndex(index)) {
+            purchases.add(index, purchase);
+        } else {
+            purchases.add(purchase);
+        }
+        unSorted();
+    }
+
+    private boolean isCorrectIndex(int index) {
+        return index >= 0 && index < purchases.size();
+    }
+
+    public int delete(int index) {
+        int result;
+        if (isCorrectIndex(index)) {
+            purchases.remove(index);
+            result = purchases.size();
+            unSorted();
+        } else {
+            result = -1;
+        }
+        return result;
     }
 
     public Purchase getPurchaseByIndex(int index) {
-
-        if (isInvalidIndex(index)) {
-            System.err.println("Error get Purchase: invalid index");
-            return null;
+        Purchase purchase;
+        if (isCorrectIndex(index)) {
+            purchase = purchases.get(index);
+        } else {
+            purchase = null;
         }
-
-        return purchases.get(index);
+        return purchase;
     }
 
-    public void sort(Comparator<Purchase> comparator) {
-        purchases.sort(comparator);
-    }
-
-    public int search(String productName, Byn price, int numberUnits) {
-        return search(productName, price, numberUnits, null);
+    public void sort() {
+        Collections.sort(purchases, comparator);
+        isSorted = true;
     }
 
     public int search(Purchase purchase) {
-        return Collections.binarySearch(purchases, purchase, Collections.reverseOrder());
+        if (!isSorted) {
+            sort();
+        }
+        return Collections.binarySearch(purchases, purchase, comparator);
     }
 
-    public int search(String productName, Byn price, int numberUnits, Byn discount) {
-
-        int priceCoins = price.getRubs() * 100 + price.getCoins();
-
-        Purchase purchase;
-
-        if (discount != null) {
-            int discountCoins = discount.getRubs() * 100 + discount.getCoins();
-            purchase = new PriceDiscountPurchase(productName, priceCoins, numberUnits, discountCoins);
-        } else {
-            purchase = new Purchase(productName, priceCoins, numberUnits);
-        }
-
-        return search(purchase);
+    private void unSorted() {
+        isSorted = false;
     }
 }

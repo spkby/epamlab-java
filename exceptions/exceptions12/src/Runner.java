@@ -1,33 +1,28 @@
 import by.gsu.epamlab.entity.Purchase;
 import by.gsu.epamlab.entity.PurchasesList;
-import by.gsu.epamlab.comparators.ComparatorFactory;
+import by.gsu.epamlab.comparators.PurchaseComparatorBuilder;
 
 public class Runner {
+    private static final String NEW_LINE = System.getProperty("line.separator");
 
     public static void main(String[] args) {
 
-        final String inFile;
-        final String addonFile;
-        final String comparatorVersion;
-
-        try {
-            inFile = args[0];
-            addonFile = args[1];
-            comparatorVersion = args[2];
-        }
-        catch (ArrayIndexOutOfBoundsException e){
+        if (args.length < 3) {
             System.err.println("Error arguments");
             return;
         }
 
+        final String inFile = args[0];
+        final String addonFile = args[1];
+
         //create an instance
+        PurchaseComparatorBuilder.buildPurchaseComparator(args[2]);
         PurchasesList listIn = new PurchasesList(inFile);
 
         //print the collection
         System.out.println();
-        System.out.println("after creation");
-        System.out.println();
-        listIn.printList();
+        System.out.println("after creation" + NEW_LINE);
+        System.out.println(listIn.toTable());
 
         //create another instance
         PurchasesList listAddon = new PurchasesList(addonFile);
@@ -42,41 +37,42 @@ public class Runner {
         listIn.insert(2, listAddon.getPurchaseByIndex(2));
 
         //try to delete elements with indices 3, 10 and –5;
-        listIn.delete(3);
-        listIn.delete(10);
-        listIn.delete(-5);
+        if (listIn.delete(3) < 0) {
+            printErr("Error Deletion: invalid index");
+        }
+        if (listIn.delete(10) < 0) {
+            printErr("Error Deletion: invalid index");
+        }
+        if (listIn.delete(-5) < 0) {
+            printErr("Error Deletion: invalid index");
+        }
 
         //print the first
-        System.out.println();
-        System.out.println("before sorting");
-        System.out.println();
-        listIn.printList();
+        System.out.println("before sorting" + NEW_LINE);
+        System.out.println(listIn.toTable());
 
         //sort the first collection;
-        listIn.sort(ComparatorFactory.getComparator(comparatorVersion));
+        listIn.sort();
 
         //print the first collection
-        System.out.println();
-        System.out.println("after sorting");
-        System.out.println();
-        listIn.printList();
+        System.out.println("after sorting" + NEW_LINE);
+        System.out.println(listIn.toTable());
 
         //find the element with index 1 and
         //the element with index 3 of the second collection
         //in the first collection and print obtained results
-        System.out.println();
         System.out.println("search results:");
-        System.out.println(search(1,listIn,listAddon));
-        System.out.println(search(3,listIn,listAddon));
-
+        System.out.println(search(1, listIn, listAddon));
+        System.out.println(search(3, listIn, listAddon));
     }
 
     private static String search(int index, PurchasesList in, PurchasesList addon) {
-
         Purchase purchase = addon.getPurchaseByIndex(index);
-
         int id = in.search(purchase);
-
         return purchase + (id >= 0 ? " is found at position " + id : " isn't found");
+    }
+
+    private static void printErr(String str) {
+        System.err.println(str);
     }
 }

@@ -1,5 +1,6 @@
 package by.gsu.epamlab.entity;
 
+import by.gsu.epamlab.exceptions.Fields;
 import by.gsu.epamlab.exceptions.NonpositiveArgumentException;
 
 import java.util.Formatter;
@@ -13,25 +14,21 @@ public class Purchase implements Comparable<Purchase> {
     private int number;
 
     public Purchase(String product, int price, int number) {
-        if (product.isEmpty()) {
-            throw new IllegalArgumentException("empty name");
-        }
         this.product = product;
-
         setPrice(price);
         setNumber(number);
     }
 
     private void setNumber(int number) {
         if (number <= 0) {
-            throw new NonpositiveArgumentException(number, "number");
+            throw new NonpositiveArgumentException(number, Fields.NUMBER);
         }
         this.number = number;
     }
 
     private void setPrice(int price) {
         if (price <= 0) {
-            throw new NonpositiveArgumentException(price, "price");
+            throw new NonpositiveArgumentException(price, Fields.PRICE);
         }
         this.price = new Byn(price);
     }
@@ -58,9 +55,15 @@ public class Purchase implements Comparable<Purchase> {
         return DASH;
     }
 
+
     public String print() {
         Formatter formatter = new Formatter();
-        formatter.format(FORMATTER, getProduct(), getPrice(), getNumber(), getDiscount(), getCost());
+        String format = TableRows.NAME.get() +
+                TableRows.PRICE.get() +
+                TableRows.NUMBER.get() +
+                TableRows.DISCOUNT.get() +
+                TableRows.COST.get();
+        formatter.format(format, getProduct(), getPrice(), getNumber(), getDiscount(), getCost());
         return formatter.toString();
     }
 

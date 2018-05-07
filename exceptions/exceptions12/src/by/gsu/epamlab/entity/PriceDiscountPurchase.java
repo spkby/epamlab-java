@@ -1,5 +1,6 @@
 package by.gsu.epamlab.entity;
 
+import by.gsu.epamlab.exceptions.Fields;
 import by.gsu.epamlab.exceptions.NonpositiveArgumentException;
 
 public class PriceDiscountPurchase extends Purchase {
@@ -9,6 +10,13 @@ public class PriceDiscountPurchase extends Purchase {
     public PriceDiscountPurchase(String productName, int price, int numberUnits, int priceDiscount) {
         super(productName, price, numberUnits);
         setPriceDiscount(priceDiscount);
+        checkDiscountMoreThanPrice(price, priceDiscount);
+    }
+
+    private static void checkDiscountMoreThanPrice(int price, int priceDiscount) {
+        if (price <= priceDiscount) {
+            throw new IllegalArgumentException("discount more or equal price");
+        }
     }
 
     private void setPriceDiscount(int priceDiscount) {
@@ -17,7 +25,7 @@ public class PriceDiscountPurchase extends Purchase {
 
     private void setDiscount(int priceDiscount) {
         if (priceDiscount <= 0) {
-            throw new NonpositiveArgumentException(priceDiscount, "discount");
+            throw new NonpositiveArgumentException(priceDiscount, Fields.DISCOUNT);
         }
         this.priceDiscount = new Byn(priceDiscount);
     }

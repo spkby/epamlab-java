@@ -78,12 +78,12 @@ public class Byn implements Comparable<Byn> {
     }
 
     public Byn round(Round round) {
-        round(round,0);
+        round(round, 0);
         return this;
     }
 
     public Byn round(int digits) {
-        round(Round.ROUND,digits);
+        round(Round.ROUND, digits);
         return this;
     }
 
