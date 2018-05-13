@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class Runner {
 
     private static final String PATH = "src/in.txt";
-    private static final String PATTERN = "(\\s*\\(\\s*)|(\\s*[;]\\s*)|(\\s*\\)\\s*)";
+    private static final String PATTERN = "(\\(\\s*)|(\\s*[;]\\s*)|(\\s*\\))";
     private static final String FILE_NOT_FOUND = "File not found";
 
     private static final int POSITION_X1 = 1;
