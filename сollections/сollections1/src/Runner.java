@@ -14,10 +14,10 @@ public class Runner {
 
     public static void main(String[] args) {
         final String path = "src/in.csv";
-        Map<Purchase, Weekdays> firstMap = new HashMap<>();
-        Map<Purchase, Weekdays> lastMap = new HashMap<>();
-        Map<Weekdays, List<Purchase>> enumMap = new HashMap<>();
-        List<PricePurchase> listDiscount = new ArrayList<>();
+        Map<Purchase, Weekdays> purchaseWeekdaysFirstMap = new HashMap<>();
+        Map<Purchase, Weekdays> purchaseWeekdaysLastMap = new HashMap<>();
+        Map<Weekdays, List<Purchase>> weekdaysPurchasesMap = new HashMap<>();
+        List<PricePurchase> pricePurchasesList = new ArrayList<>();
 
         Scanner scanner = null;
         try {
@@ -27,19 +27,19 @@ public class Runner {
                 Purchase p = PurchasesFactory.getPurchaseFromFactory(scanner.nextLine());
                 Weekdays w = Weekdays.valueOf(scanner.nextLine());
 
-                lastMap.put(p, w);
+                purchaseWeekdaysLastMap.put(p, w);
 
-                if (!firstMap.containsKey(p)) {
-                    firstMap.put(p, w);
+                if (!purchaseWeekdaysFirstMap.containsKey(p)) {
+                    purchaseWeekdaysFirstMap.put(p, w);
                 }
 
-                if (!enumMap.containsKey(w)) {
-                    enumMap.put(w, new ArrayList<Purchase>());
+                if (!weekdaysPurchasesMap.containsKey(w)) {
+                    weekdaysPurchasesMap.put(w, new ArrayList<Purchase>());
                 }
-                enumMap.get(w).add(p);
+                weekdaysPurchasesMap.get(w).add(p);
 
-                if (p instanceof PricePurchase) {
-                    listDiscount.add((PricePurchase) p);
+                if (p.getClass() == PricePurchase.class) {
+                    pricePurchasesList.add((PricePurchase) p);
                 }
 
             }
@@ -51,33 +51,35 @@ public class Runner {
             }
         }
 
-        System.out.println("print the map");
-        print(firstMap);
-        print(lastMap);
+        System.out.println(Constants.PRINT_THE_MAP);
+        print(purchaseWeekdaysFirstMap);
+        print(purchaseWeekdaysLastMap);
 
         System.out.println("find the first and the last weekdays for bread with price 1.55");
-        System.out.println("first: " + search(firstMap, new Purchase("bread", 155, 1)));
-        System.out.println("last: " + search(lastMap, new Purchase("bread", 155, 1)));
+        System.out.println("first: " + search(purchaseWeekdaysFirstMap, new Purchase("bread", 155, 1)));
+        System.out.println("last: " + search(purchaseWeekdaysLastMap, new Purchase("bread", 155, 1)));
         System.out.print("find the first weekday for bread with price 1.70 ");
-        System.out.println(search(firstMap, new Purchase("bread", 170, 1)));
+        System.out.println(search(purchaseWeekdaysFirstMap, new Purchase("bread", 170, 1)));
         System.out.println();
 
-        remove(firstMap, new Purchase("meat", 0, 0));
-        remove(firstMap, Weekdays.FRIDAY);
+        remove(purchaseWeekdaysFirstMap, new Purchase("meat", 0, 0));
+        remove(purchaseWeekdaysLastMap, Weekdays.FRIDAY);
 
-        System.out.println("print the map");
-        print(firstMap);
-        print(lastMap);
+        System.out.println(Constants.PRINT_THE_MAP);
+        print(purchaseWeekdaysFirstMap);
+        print(purchaseWeekdaysLastMap);
 
-        System.out.println(Constants.TOTAL_COST + "PricePurchase " + calcTotalCost(listDiscount));
+        System.out.println(Constants.TOTAL_COST + "PricePurchase " + calcTotalCost(pricePurchasesList));
         System.out.println();
 
-        System.out.println("print the map");
-        print(enumMap);
-        for (Weekdays w : enumMap.keySet()) {
-            System.out.println(Constants.TOTAL_COST + "in " + w + " " + calcTotalCost(enumMap.get(w)));
+        System.out.println(Constants.PRINT_THE_MAP);
+        print(weekdaysPurchasesMap);
+        for (Weekdays w : weekdaysPurchasesMap.keySet()) {
+            System.out.println(Constants.TOTAL_COST + "in " + w + " " + calcTotalCost(weekdaysPurchasesMap.get(w)));
         }
-        System.out.println(search(enumMap, Weekdays.MONDAY));
+
+        System.out.print("All purchases in " + Weekdays.MONDAY + ": ");
+        System.out.println(search(weekdaysPurchasesMap, Weekdays.MONDAY));
 
         System.out.println();
     }
@@ -102,6 +104,19 @@ public class Runner {
     }
 
     private static <K, V, T> void remove(Map<K, V> map, T t) {
-    // TODO
+        if (t instanceof Purchase) {
+            for (Iterator<K> itK = map.keySet().iterator(); itK.hasNext(); ) {
+                if (((Purchase) itK.next()).getName().equals(((Purchase) t).getName())) {
+                    itK.remove();
+                }
+            }
+        }
+
+        for (Iterator<V> itV = map.values().iterator(); itV.hasNext(); ) {
+            if (itV.next().equals(t)) {
+                itV.remove();
+            }
+        }
+
     }
 }

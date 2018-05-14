@@ -14,6 +14,18 @@ public class Purchase implements Comparable<Purchase> {
         this.price = new Byn(priceInt);
     }
 
+    public Byn getPrice() {
+        return price;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public Byn getCost() {
         Byn cost = new Byn(price);
         return cost.mul(number);
@@ -49,11 +61,5 @@ public class Purchase implements Comparable<Purchase> {
         return purchase.getCost().compareTo(getCost());
     }
 
-    public Byn getPrice() {
-        return price;
-    }
 
-    public int getNumber() {
-        return number;
-    }
 }
