@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Runner {
+public class RunnerList {
 
     private static final String PATH = "src/in.txt";
     private static final String PATTERN = "[\\s(;)]+";
