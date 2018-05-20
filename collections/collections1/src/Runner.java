@@ -44,12 +44,15 @@ public class Runner {
                 }
             }
 
-            print(purchaseWeekdaysFirstMap);
-            print(purchaseWeekdaysLastMap);
+            print(Constants.PURCHASE_WEEKDAY_FIRST_MAP, purchaseWeekdaysFirstMap);
+            print(Constants.PURCHASE_WEEKDAY_LAST_MAP, purchaseWeekdaysLastMap);
 
-            search(purchaseWeekdaysFirstMap, new Purchase("bread", 155, 1));
-            search(purchaseWeekdaysLastMap, new Purchase("bread", 155, 1));
-            search(purchaseWeekdaysFirstMap, new Purchase("bread", 170, 1));
+            Purchase searchPurchase = new Purchase("bread", 155, 1);
+
+            search(purchaseWeekdaysFirstMap, searchPurchase);
+            search(purchaseWeekdaysLastMap, searchPurchase);
+            searchPurchase.getPrice().add(new Byn(15));
+            search(purchaseWeekdaysFirstMap, searchPurchase);
 
             remove(purchaseWeekdaysFirstMap, new EntryChecker<Purchase, Weekdays>() {
                 @Override
@@ -67,14 +70,14 @@ public class Runner {
                 }
             });
 
-            print(purchaseWeekdaysFirstMap);
-            print(purchaseWeekdaysLastMap);
+            print(Constants.PURCHASE_WEEKDAY_FIRST_MAP, purchaseWeekdaysFirstMap);
+            print(Constants.PURCHASE_WEEKDAY_LAST_MAP, purchaseWeekdaysLastMap);
 
             System.out.println(Constants.TOTAL_COST + "PricePurchase is " + calcTotalCost(pricePurchasesList));
 
-            print(weekdaysPurchasesMap);
-            for (Weekdays w : weekdaysPurchasesMap.keySet()) {
-                System.out.println(Constants.TOTAL_COST + "in " + w + " is " + calcTotalCost(weekdaysPurchasesMap.get(w)));
+            print(Constants.WEEKDAY_PURCHASES_ENUM_MAP, weekdaysPurchasesMap);
+            for (Map.Entry<Weekdays, List<Purchase>> entry : weekdaysPurchasesMap.entrySet()) {
+                System.out.println(Constants.TOTAL_COST + "in " + entry.getKey() + " is " + calcTotalCost(entry.getValue()));
             }
 
             System.out.print("All purchases in " + Weekdays.MONDAY + ": ");
@@ -94,7 +97,7 @@ public class Runner {
                 }
             });
 
-            print(weekdaysPurchasesMap);
+            print(Constants.WEEKDAY_PURCHASES_ENUM_MAP, weekdaysPurchasesMap);
 
         } catch (FileNotFoundException e) {
             System.err.println(Constants.FILE_NOT_FOUND);
@@ -105,9 +108,9 @@ public class Runner {
         }
     }
 
-    private static <K, V> void print(Map<K, V> map) {
+    private static <K, V> void print(String header, Map<K, V> map) {
         System.out.println();
-        System.out.println(Constants.PRINT_THE_MAP);
+        System.out.println(Constants.PRINT_THE_MAP + " " + header);
         for (Map.Entry<K, V> entry : map.entrySet()) {
             System.out.println(entry.getKey() + Constants.DASH + entry.getValue());
         }
