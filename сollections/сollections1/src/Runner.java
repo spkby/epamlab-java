@@ -11,7 +11,6 @@ import java.util.*;
 
 public class Runner {
 
-
     public static void main(String[] args) {
         final String path = "src/in.csv";
 
@@ -71,11 +70,11 @@ public class Runner {
             print(purchaseWeekdaysFirstMap);
             print(purchaseWeekdaysLastMap);
 
-            System.out.println(Constants.TOTAL_COST + "PricePurchase " + calcTotalCost(pricePurchasesList));
+            System.out.println(Constants.TOTAL_COST + "PricePurchase is " + calcTotalCost(pricePurchasesList));
 
             print(weekdaysPurchasesMap);
             for (Weekdays w : weekdaysPurchasesMap.keySet()) {
-                System.out.println(Constants.TOTAL_COST + "in " + w + " " + calcTotalCost(weekdaysPurchasesMap.get(w)));
+                System.out.println(Constants.TOTAL_COST + "in " + w + " is " + calcTotalCost(weekdaysPurchasesMap.get(w)));
             }
 
             System.out.print("All purchases in " + Weekdays.MONDAY + ": ");
@@ -117,7 +116,7 @@ public class Runner {
 
     private static <K, V> void search(Map<K, V> map, K key) {
         V value = map.get(key);
-        System.out.println("Find value is " + (value != null ? value : "not found"));
+        System.out.println("Value " + key + " is " + (value != null ? value : "not found"));
     }
 
     private static Byn calcTotalCost(List<? extends Purchase> list) {
