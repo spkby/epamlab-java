@@ -28,7 +28,7 @@ public class ResultHandler extends DefaultHandler {
     }
 
     private static enum Tags {
-        STUDENT, TESTS, TEST, LOGIN
+        STUDENT, TESTS, TEST, LOGIN, RESULTS
     }
 
     private static enum TestAttributes {
@@ -37,33 +37,40 @@ public class ResultHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
-        if (qName.toUpperCase().equals(Tags.STUDENT.name())) {
-            student = new Student();
-        }
-        if (qName.toUpperCase().equals(Tags.TESTS.name())) {
-            tests = new ArrayList<>();
-        }
 
-        if (qName.toUpperCase().equals(Tags.TEST.name())) {
-            test = new Test(
-                    attributes.getValue(TestAttributes.NAME.name().toLowerCase()),
-                    attributes.getValue(TestAttributes.DATE.name().toLowerCase()),
-                    (int) (10 * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase()))));
-            tests.add(test);
+        Tags tag = Tags.valueOf(qName.toUpperCase());
+
+        switch (tag) {
+            case STUDENT:
+                student = new Student();
+                break;
+            case TESTS:
+                tests = new ArrayList<>();
+                break;
+            case TEST:
+                test = new Test(
+                        attributes.getValue(TestAttributes.NAME.name().toLowerCase()),
+                        attributes.getValue(TestAttributes.DATE.name().toLowerCase()),
+                        (int) (10 * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase()))));
+                tests.add(test);
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) {
-        if (qName.toUpperCase().equals(Tags.STUDENT.name())) {
-            students.add(student);
-        }
-        if (qName.toUpperCase().equals(Tags.LOGIN.name())) {
-            student.setLogin(value);
-        }
 
-        if (qName.toUpperCase().equals(Tags.TESTS.name())) {
-            student.setTests(tests);
+        Tags tag = Tags.valueOf(qName.toUpperCase());
+
+        switch (tag) {
+            case STUDENT:
+                students.add(student);
+                break;
+            case LOGIN:
+                student.setLogin(value);
+                break;
+            case TESTS:
+                student.setTests(tests);
+                break;
         }
     }
 
