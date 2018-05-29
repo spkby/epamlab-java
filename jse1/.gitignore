@@ -1,6 +1,7 @@
 *.iml
 *.jar
 *.jpg
+*.ldb
 /.idea/
 /out/
 /lib/
