@@ -1,13 +1,11 @@
-package by.gsu.epamlab.beans;
-
-import by.gsu.epamlab.Constants;
+package by.gsu.epamlab;
 
 import java.sql.Date;
 
 public class Result {
 
-    private Student student;
-    private Test test;
+    private String student;
+    private String test;
 
     private int mark;
     private Date date;
@@ -15,26 +13,26 @@ public class Result {
     public Result() {
     }
 
-    public Result(Student student, Test test, Date date, int mark) {
+    public Result(String student, String test, Date date, int mark) {
         this.student = student;
         this.test = test;
         this.mark = mark;
         this.date = date;
     }
 
-    public Student getStudent() {
+    public String getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(String student) {
         this.student = student;
     }
 
-    public Test getTest() {
+    public String getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(String test) {
         this.test = test;
     }
 
@@ -56,6 +54,6 @@ public class Result {
 
     @Override
     public String toString() {
-        return student + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + mark;
+        return student + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + PrintMark.print(mark);
     }
 }

@@ -1,10 +1,10 @@
-import by.gsu.epamlab.DB;
+import by.gsu.epamlab.DAO;
 
 public class Runner1 {
 
     public static void main(String[] args) {
 
-        DB.buildConnection();
+        DAO.buildConnection();
 
 
 

@@ -1,11 +1,9 @@
 package by.gsu.epamlab.loads;
 
 import by.gsu.epamlab.Constants;
-import by.gsu.epamlab.DB;
+import by.gsu.epamlab.DAO;
 import by.gsu.epamlab.Utils;
-import by.gsu.epamlab.beans.Result;
-import by.gsu.epamlab.beans.Student;
-import by.gsu.epamlab.beans.Test;
+import by.gsu.epamlab.Result;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -15,8 +13,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoadFromXML extends DefaultHandler implements Load {
 
@@ -24,7 +20,7 @@ public class LoadFromXML extends DefaultHandler implements Load {
     public void load() {
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
-        results = new ArrayList<>();
+        //results = new ArrayList<>();
 
         try {
             SAXParser parser = factory.newSAXParser();
@@ -34,24 +30,24 @@ public class LoadFromXML extends DefaultHandler implements Load {
             throw new IllegalStateException(e);
         }
 
-        for (Result result:results){
-            DB.add(result);
-        }
+        /*for (Result result : results) {
+            DAO.add(result);
+        }*/
     }
 
     private final String path = Constants.PATH + Constants.FILE_NAME + Constants.EXT_XML;
 
     private String value;
-    private Student student;
-    private Test test;
+    private String student;
+    private String test;
     private java.sql.Date date;
-    private List<Result> results;
+    //private List<Result> results;
 
     public LoadFromXML() {
     }
 
     private static enum Tags {
-        STUDENT, TESTS, TEST, LOGIN, RESULTS
+        TEST, LOGIN, RESULTS, TESTS, STUDENT
     }
 
     private static enum TestAttributes {
@@ -61,30 +57,19 @@ public class LoadFromXML extends DefaultHandler implements Load {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
 
-        Tags tag = Tags.valueOf(qName.toUpperCase());
-
-        switch (tag) {
-            case STUDENT:
-                student = new Student();
-                break;
-            case TEST:
-                test = new Test(attributes.getValue(TestAttributes.NAME.name().toLowerCase()));
-                date = Utils.parseDate(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
-                int mark = (int) (10 * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
-
-                results.add(new Result(student, test, date, mark));
+        if (Tags.valueOf(qName.toUpperCase()) == Tags.TEST) {
+            test = attributes.getValue(TestAttributes.NAME.name().toLowerCase());
+            date = Utils.parseDate(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
+            int mark = (int) (10 * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
+            DAO.add(new Result(student, test, date, mark));
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) {
 
-        Tags tag = Tags.valueOf(qName.toUpperCase());
-
-        switch (tag) {
-            case LOGIN:
-                student.setLogin(value);
-                break;
+        if (Tags.valueOf(qName.toUpperCase()) == Tags.LOGIN) {
+            student = value;
         }
     }
 
