@@ -1,5 +1,7 @@
 package by.gsu.epamlab;
 
+import by.gsu.epamlab.beans.MeanMark;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

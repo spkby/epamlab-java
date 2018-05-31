@@ -17,16 +17,16 @@ import java.io.IOException;
 public class LoadFromXML extends DefaultHandler implements Load {
 
     @Override
-    public void load() {
+    public void load(String fileName) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
         //results = new ArrayList<>();
 
         try {
             SAXParser parser = factory.newSAXParser();
-            FileInputStream file = new FileInputStream(path);
+            FileInputStream file = new FileInputStream(fileName);
             parser.parse(file, this);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException e) {
             throw new IllegalStateException(e);
         }
 
@@ -34,8 +34,6 @@ public class LoadFromXML extends DefaultHandler implements Load {
             DAO.add(result);
         }*/
     }
-
-    private final String path = Constants.PATH + Constants.FILE_NAME + Constants.EXT_XML;
 
     private String value;
     private String student;
@@ -60,7 +58,7 @@ public class LoadFromXML extends DefaultHandler implements Load {
         if (Tags.valueOf(qName.toUpperCase()) == Tags.TEST) {
             test = attributes.getValue(TestAttributes.NAME.name().toLowerCase());
             date = Utils.parseDate(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
-            int mark = (int) (10 * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
+            int mark = (int) (Constants.DECIMAL * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
             DAO.add(new Result(student, test, date, mark));
         }
     }

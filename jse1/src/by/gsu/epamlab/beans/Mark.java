@@ -1,17 +1,17 @@
-package by.gsu.epamlab;
+package by.gsu.epamlab.beans;
 
-public class PrintMark {
+public class Mark {
 
-    private PrintMark() {
+    private Mark() {
     }
 
     private static Type typePrn;
 
     public enum Type {
-        CSV_INT, XML, CSV_DBL
+        XML, CSV_INT, CSV_DBL
     }
 
-    public static void setPrintType(Type type) {
+    public static void setTypeMark(Type type) {
         if (typePrn != null) {
             return;
         }

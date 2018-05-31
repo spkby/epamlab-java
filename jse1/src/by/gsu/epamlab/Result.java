@@ -1,5 +1,7 @@
 package by.gsu.epamlab;
 
+import by.gsu.epamlab.beans.Mark;
+
 import java.sql.Date;
 
 public class Result {
@@ -54,6 +56,6 @@ public class Result {
 
     @Override
     public String toString() {
-        return student + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + PrintMark.print(mark);
+        return student + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + Mark.print(mark);
     }
 }
