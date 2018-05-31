@@ -1,7 +1,8 @@
 import by.gsu.epamlab.Constants;
 import by.gsu.epamlab.DAO;
-import by.gsu.epamlab.beans.MeanMark;
+import by.gsu.epamlab.Results;
 import by.gsu.epamlab.beans.Mark;
+import by.gsu.epamlab.beans.Result;
 import by.gsu.epamlab.loads.LoadFromXML;
 
 import java.util.List;
@@ -18,13 +19,13 @@ public class Runner2 {
 
             Mark.setTypeMark(Mark.Type.XML);
 
-            new LoadFromXML().load(Constants.PATH + Constants.FILE_NAME + Constants.EXT_XML);
+            Results.loadFromFile(new LoadFromXML(), Constants.PATH + Constants.FILE_NAME + Constants.EXT_XML);
 
-            List<MeanMark> meanMarks = DAO.selectMeanMarks();
+            Results.meanMarks();
 
-            for (MeanMark meanMark : meanMarks) {
-                System.out.println(meanMark);
-            }
+            List<Result> list = Results.printTestByCurrentMonth();
+
+            Results.printTestsInTheLatestDay(list);
 
         } catch (IllegalStateException e) {
             System.err.println(e);

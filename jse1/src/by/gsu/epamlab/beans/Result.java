@@ -1,6 +1,6 @@
-package by.gsu.epamlab;
+package by.gsu.epamlab.beans;
 
-import by.gsu.epamlab.beans.Mark;
+import by.gsu.epamlab.Constants;
 
 import java.sql.Date;
 
@@ -11,9 +11,6 @@ public class Result {
 
     private int mark;
     private Date date;
-
-    public Result() {
-    }
 
     public Result(String student, String test, Date date, int mark) {
         this.student = student;
@@ -26,32 +23,16 @@ public class Result {
         return student;
     }
 
-    public void setStudent(String student) {
-        this.student = student;
-    }
-
     public String getTest() {
         return test;
-    }
-
-    public void setTest(String test) {
-        this.test = test;
     }
 
     public int getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
-        this.mark = mark;
-    }
-
     public Date getDate() {
         return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     @Override

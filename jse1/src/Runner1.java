@@ -1,7 +1,10 @@
 import by.gsu.epamlab.Constants;
 import by.gsu.epamlab.DAO;
+import by.gsu.epamlab.Results;
+import by.gsu.epamlab.beans.Result;
 import by.gsu.epamlab.beans.Mark;
 import by.gsu.epamlab.beans.MeanMark;
+import by.gsu.epamlab.loads.Load;
 import by.gsu.epamlab.loads.LoadFromCSV;
 
 import java.util.List;
@@ -12,20 +15,18 @@ public class Runner1 {
 
         try {
             Mark.Type typeMark = Mark.Type.CSV_INT;
-
-            DAO.buildConnection();
-
-            DAO.prepareDB();
-
             Mark.setTypeMark(typeMark);
 
-            new LoadFromCSV().load(Constants.PATH + Constants.FILE_NAME + typeMark.ordinal() + Constants.EXT_CSV);
+            DAO.buildConnection();
+            DAO.prepareDB();
 
-            List<MeanMark> meanMarks = DAO.selectMeanMarks();
+            Results.loadFromFile(new LoadFromCSV(), Constants.PATH + Constants.FILE_NAME + typeMark.ordinal() + Constants.EXT_CSV);
 
-            for (MeanMark meanMark : meanMarks) {
-                System.out.println(meanMark);
-            }
+            Results.meanMarks();
+
+            List<Result> list = Results.printTestByCurrentMonth();
+
+            Results.printTestsInTheLatestDay(list);
 
         } catch (IllegalStateException e) {
             System.err.println(e);

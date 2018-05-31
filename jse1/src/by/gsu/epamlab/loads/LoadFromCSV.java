@@ -1,6 +1,7 @@
 package by.gsu.epamlab.loads;
 
 import by.gsu.epamlab.*;
+import by.gsu.epamlab.beans.Result;
 
 import java.io.FileReader;
 import java.io.IOException;

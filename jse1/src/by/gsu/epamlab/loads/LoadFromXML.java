@@ -3,7 +3,7 @@ package by.gsu.epamlab.loads;
 import by.gsu.epamlab.Constants;
 import by.gsu.epamlab.DAO;
 import by.gsu.epamlab.Utils;
-import by.gsu.epamlab.Result;
+import by.gsu.epamlab.beans.Result;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -20,8 +20,6 @@ public class LoadFromXML extends DefaultHandler implements Load {
     public void load(String fileName) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
-        //results = new ArrayList<>();
-
         try {
             SAXParser parser = factory.newSAXParser();
             FileInputStream file = new FileInputStream(fileName);
@@ -29,17 +27,12 @@ public class LoadFromXML extends DefaultHandler implements Load {
         } catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException e) {
             throw new IllegalStateException(e);
         }
-
-        /*for (Result result : results) {
-            DAO.add(result);
-        }*/
     }
 
     private String value;
     private String student;
     private String test;
     private java.sql.Date date;
-    //private List<Result> results;
 
     public LoadFromXML() {
     }

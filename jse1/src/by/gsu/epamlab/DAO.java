@@ -1,9 +1,11 @@
 package by.gsu.epamlab;
 
 import by.gsu.epamlab.beans.MeanMark;
+import by.gsu.epamlab.beans.Result;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DAO {
@@ -23,11 +25,16 @@ public class DAO {
     private static final String SELECT_IDLOGIN = "SELECT idlogin FROM logins WHERE login = ?";
     private static final String SELECT_IDTEST = "SELECT idtest FROM tests WHERE test = ?";
 
-    private static final String SELECT_RESULTS = "SELECT * FROM results";
     private static final String SELECT_AVERAGE = "select login, avg(mark) from results " +
             "inner join logins on results.loginid = logins.idlogin " +
             "group by login " +
             "order by 2 desc";
+
+    private static final String SELECT_RESULTS_BY_MONTH_YEAR = "SELECT login,test,dat,mark FROM ((results " +
+            "INNER JOIN tests ON tests.idtest = results.testid) " +
+            "INNER JOIN logins ON logins.idlogin = results.loginid) " +
+            "WHERE MONTH(dat) = MONTH(now()) AND YEAR(dat) = YEAR(now()) " +
+            "ORDER BY dat";
 
     private static Connection connection;
     private static PreparedStatement statement;
@@ -88,19 +95,21 @@ public class DAO {
         }
     }
 
-    private static List select() {
+    public static List selectByMonthYear() {
 
-        List<Result> results = new ArrayList<>();
+        List<Result> results = new LinkedList<>();
         try {
-            statement = connection.prepareStatement(SELECT_RESULTS);
-
+            statement = connection.prepareStatement(SELECT_RESULTS_BY_MONTH_YEAR);
             resultSet = statement.executeQuery();
 
-            /*while (result.next()) {
-                int len = result.getInt("len");
-                int num = result.getInt("num");
-                results.add(new LenNum(len, num));
-            }*/
+            while (resultSet.next()) {
+                results.add(new Result(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getDate(3),
+                        resultSet.getInt(4)
+                        ));
+            }
 
         } catch (SQLException e) {
             throw new IllegalStateException(e);

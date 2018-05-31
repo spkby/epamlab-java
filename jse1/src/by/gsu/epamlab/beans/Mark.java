@@ -23,14 +23,16 @@ public class Mark {
 
         switch (typePrn) {
             case CSV_INT:
-                stringBuilder.append(mark);
+                stringBuilder.append(mark / 10);
                 break;
             case XML:
                 stringBuilder.append(mark / 10).append(".").append(mark % 10);
+                break;
             case CSV_DBL:
                 if (mark % 10 > 0) {
                     stringBuilder.append(mark / 10).append(".").append(mark % 10);
                 } else stringBuilder.append(mark / 10);
+                break;
         }
         return stringBuilder.toString();
     }
