@@ -1,0 +1,10 @@
+*.iml
+*.jar
+*.jpg
+*.ldb
+/.idea/
+/out/
+/lib/
+/.gradle/
+/gradle/
+/build/
