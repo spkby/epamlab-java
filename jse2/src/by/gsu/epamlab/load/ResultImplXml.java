@@ -1,7 +1,6 @@
-package by.gsu.epamlab.loads;
+package by.gsu.epamlab.load;
 
 import by.gsu.epamlab.Constants;
-import by.gsu.epamlab.DAO;
 import by.gsu.epamlab.Utils;
 import by.gsu.epamlab.beans.Result;
 import org.xml.sax.Attributes;
@@ -13,29 +12,17 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LoadFromXML extends DefaultHandler implements Load {
-
-    @Override
-    public void load(String fileName) {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-
-        try {
-            SAXParser parser = factory.newSAXParser();
-            FileInputStream file = new FileInputStream(fileName);
-            parser.parse(file, this);
-        } catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException e) {
-            throw new IllegalStateException(e);
-        }
-    }
+public class ResultImplXml extends DefaultHandler implements IResultDAO {
 
     private String value;
-    private String student;
+    private String login;
     private String test;
     private java.sql.Date date;
-
-    public LoadFromXML() {
-    }
+    private List<Result> results;
+    private int currIndex = -1;
 
     private static enum Tags {
         TEST, LOGIN, RESULTS, TESTS, STUDENT
@@ -45,6 +32,38 @@ public class LoadFromXML extends DefaultHandler implements Load {
         NAME, DATE, MARK
     }
 
+    public ResultImplXml(String fileName) {
+
+        results = new ArrayList<>();
+
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+
+        try {
+            SAXParser parser = factory.newSAXParser();
+            FileInputStream file = new FileInputStream(fileName + Constants.EXT_XML);
+            parser.parse(file, this);
+        } catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException e) {
+            throw new IllegalStateException(e);
+        }
+
+        if (results.size() > 0) currIndex = 0;
+    }
+
+    @Override
+    public Result nextResult() {
+        return results.get(currIndex++);
+    }
+
+    @Override
+    public boolean hasResult() {
+        return currIndex != -1 && currIndex < results.size();
+    }
+
+    @Override
+    public void closeReader() {
+
+    }
+
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
 
@@ -52,7 +71,8 @@ public class LoadFromXML extends DefaultHandler implements Load {
             test = attributes.getValue(TestAttributes.NAME.name().toLowerCase());
             date = Utils.parseDate(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
             int mark = (int) (Constants.DECIMAL * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
-            DAO.add(new Result(student, test, date, mark));
+
+            results.add(new Result(login, test, date, mark));
         }
     }
 
@@ -60,7 +80,7 @@ public class LoadFromXML extends DefaultHandler implements Load {
     public void endElement(String uri, String localName, String qName) {
 
         if (Tags.valueOf(qName.toUpperCase()) == Tags.LOGIN) {
-            student = value;
+            login = value;
         }
     }
 
@@ -68,4 +88,6 @@ public class LoadFromXML extends DefaultHandler implements Load {
     public void characters(char[] ch, int start, int length) {
         value = new String(ch, start, length);
     }
+
+
 }

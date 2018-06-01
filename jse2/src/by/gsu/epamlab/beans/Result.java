@@ -2,25 +2,23 @@ package by.gsu.epamlab.beans;
 
 import by.gsu.epamlab.Constants;
 
-import java.sql.Date;
-
 public class Result {
 
-    private String student;
+    private String login;
     private String test;
 
     private int mark;
-    private Date date;
+    private java.sql.Date date;
 
-    public Result(String student, String test, Date date, int mark) {
-        this.student = student;
+    public Result(String login, String test, java.sql.Date date, int mark) {
+        this.login = login;
         this.test = test;
         this.mark = mark;
         this.date = date;
     }
 
-    public String getStudent() {
-        return student;
+    public String getLogin() {
+        return login;
     }
 
     public String getTest() {
@@ -31,12 +29,12 @@ public class Result {
         return mark;
     }
 
-    public Date getDate() {
+    public java.sql.Date getDate() {
         return date;
     }
 
     @Override
     public String toString() {
-        return student + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + Mark.print(mark);
+        return login + Constants.DELIMITER + test + Constants.DELIMITER + date + Constants.DELIMITER + Mark.print(mark);
     }
 }

@@ -12,14 +12,14 @@ public class MeanMark {
 
     public MeanMark(String student, double meanMark) {
         this.student = student;
-        this.meanMark = meanMark;
+        this.meanMark = meanMark / Constants.DECIMAL;
     }
 
     @Override
     public String toString() {
 
         Formatter formatter = new Formatter(Locale.US);
-        formatter.format("%.2f", meanMark);
+        formatter.format(Constants.FORMAT_MEAN_MARK, meanMark);
         return student + Constants.DELIMITER + formatter;
     }
 }

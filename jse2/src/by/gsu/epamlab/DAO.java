@@ -15,20 +15,16 @@ public class DAO {
     private static final String DB_USER = "jse";
     private static final String DB_PASS = "jse";
 
-    private static final String CLEAR_LOGINS = "DELETE FROM logins";
-    private static final String CLEAR_TESTS = "DELETE FROM tests";
-    private static final String CLEAR_RESULTS = "DELETE FROM results";
-
-    private static final String INSERT_INTO_LOGINS = "INSERT INTO logins (login) values(?)";
-    private static final String INSERT_INTO_TESTS = "INSERT INTO tests (test) values(?)";
+    private static final String INSERT_LOGIN = "INSERT INTO logins (login) values(?)";
+    private static final String INSERT_TEST = "INSERT INTO tests (test) values(?)";
     private static final String INSERT_INTO_RESULTS = "INSERT INTO results (loginid, testid, dat, mark) VALUES(?,?,?,?)";
     private static final String SELECT_IDLOGIN = "SELECT idlogin FROM logins WHERE login = ?";
     private static final String SELECT_IDTEST = "SELECT idtest FROM tests WHERE test = ?";
 
-    private static final String SELECT_AVERAGE = "select login, avg(mark) from results " +
-            "inner join logins on results.loginid = logins.idlogin " +
-            "group by login " +
-            "order by 2 desc";
+    private static final String SELECT_AVERAGE = "SELECT login, avg(mark) FROM results " +
+            "INNER JOIN logins ON results.loginid = logins.idlogin " +
+            "GROUP BY login " +
+            "ORDER BY 2 DESC ";
 
     private static final String SELECT_RESULTS_BY_MONTH_YEAR = "SELECT login,test,dat,mark FROM ((results " +
             "INNER JOIN tests ON tests.idtest = results.testid) " +
@@ -36,51 +32,72 @@ public class DAO {
             "WHERE MONTH(dat) = MONTH(now()) AND YEAR(dat) = YEAR(now()) " +
             "ORDER BY dat";
 
-    private static Connection connection;
-    private static PreparedStatement statement;
-    private static ResultSet resultSet;
-
-
-    private enum Table {
-        LOGIN, TEST
-    }
+    private static Connection cn;
+    private static PreparedStatement st;
+    private static ResultSet rs;
 
     private DAO() {
     }
 
-    public static void buildConnection() {
+    public static Connection buildConnection() {
 
-        if (connection != null) {
-            return;
+        if (cn != null) {
+            return cn;
         }
 
         try {
             Class.forName(CLASS_NAME);
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            cn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         } catch (ClassNotFoundException | SQLException e) {
             throw new IllegalStateException(e);
         }
+
+        return cn;
     }
 
     public static void close() {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
+        closeResultSet();
 
-            if (statement != null) {
-                statement.close();
-            }
+        closeStatement();
 
-            if (connection != null) {
-                connection.close();
+        closeConnection();
+    }
+
+    private static void closeResultSet() {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                System.err.println(Constants.RESOURCE_CLOSING_PROBLEM + e);
             }
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
+        }
+    }
+
+    private static void closeStatement() {
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                System.err.println(Constants.RESOURCE_CLOSING_PROBLEM + e);
+            }
+        }
+    }
+
+    private static void closeConnection() {
+        if (cn != null) {
+            try {
+                cn.close();
+            } catch (SQLException e) {
+                System.err.println(Constants.RESOURCE_CLOSING_PROBLEM + e);
+            }
         }
     }
 
     public static void prepareDB() {
+        final String CLEAR_LOGINS = "DELETE FROM logins";
+        final String CLEAR_TESTS = "DELETE FROM tests";
+        final String CLEAR_RESULTS = "DELETE FROM results";
+
         clear(CLEAR_LOGINS);
         clear(CLEAR_TESTS);
         clear(CLEAR_RESULTS);
@@ -88,8 +105,8 @@ public class DAO {
 
     private static void clear(String sql) {
         try {
-            statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
+            st = cn.prepareStatement(sql);
+            st.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
@@ -99,16 +116,16 @@ public class DAO {
 
         List<Result> results = new LinkedList<>();
         try {
-            statement = connection.prepareStatement(SELECT_RESULTS_BY_MONTH_YEAR);
-            resultSet = statement.executeQuery();
+            st = cn.prepareStatement(SELECT_RESULTS_BY_MONTH_YEAR);
+            rs = st.executeQuery();
 
-            while (resultSet.next()) {
+            while (rs.next()) {
                 results.add(new Result(
-                        resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getDate(3),
-                        resultSet.getInt(4)
-                        ));
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getDate(3),
+                        rs.getInt(4)
+                ));
             }
 
         } catch (SQLException e) {
@@ -117,31 +134,21 @@ public class DAO {
         return results;
     }
 
-    private static int getId(String value, Table table) {
+    private static int getId(String value, String sql) {
         int id = -1;
 
-        String sql = null;
-        switch (table) {
-            case LOGIN:
-                sql = SELECT_IDLOGIN;
-                break;
-            case TEST:
-                sql = SELECT_IDTEST;
-                break;
-        }
-
         try {
-            statement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+            st = cn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
-            statement.setString(1, value);
-            resultSet = statement.executeQuery();
+            st.setString(1, value);
+            rs = st.executeQuery();
 
-            resultSet.last();
-            int count = resultSet.getRow();
-            resultSet.beforeFirst();
+            rs.last();
+            int count = rs.getRow();
+            rs.beforeFirst();
             if (count != 0) {
-                resultSet.next();
-                id = resultSet.getInt(1);
+                rs.next();
+                id = rs.getInt(1);
             }
 
         } catch (SQLException e) {
@@ -150,22 +157,12 @@ public class DAO {
         return id;
     }
 
-    private static void addNewValue(String value, Table table) {
-
-        String sql = null;
-        switch (table) {
-            case LOGIN:
-                sql = INSERT_INTO_LOGINS;
-                break;
-            case TEST:
-                sql = INSERT_INTO_TESTS;
-                break;
-        }
+    private static void addNewValue(String value, String sql) {
 
         try {
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, value);
-            statement.executeUpdate();
+            st = cn.prepareStatement(sql);
+            st.setString(1, value);
+            st.executeUpdate();
 
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -174,41 +171,39 @@ public class DAO {
 
     public static void add(Result result) {
 
-        int loginId = getId(result.getStudent(), Table.LOGIN);
+        int loginId = getId(result.getLogin(), SELECT_IDLOGIN);
         if (loginId == -1) {
-            addNewValue(result.getStudent(), Table.LOGIN);
-            loginId = getId(result.getStudent(), Table.LOGIN);
+            addNewValue(result.getLogin(), INSERT_LOGIN);
+            loginId = getId(result.getLogin(), SELECT_IDLOGIN);
         }
 
-        int testId = getId(result.getTest(), Table.TEST);
+        int testId = getId(result.getTest(), SELECT_IDTEST);
         if (testId == -1) {
-            addNewValue(result.getTest(), Table.TEST);
-            testId = getId(result.getTest(), Table.TEST);
+            addNewValue(result.getTest(), INSERT_TEST);
+            testId = getId(result.getTest(), SELECT_IDTEST);
         }
-
         try {
-            statement = connection.prepareStatement(INSERT_INTO_RESULTS);
-            statement.setInt(1, loginId);
-            statement.setInt(2, testId);
-            statement.setDate(3, result.getDate());
-            statement.setInt(4, result.getMark());
-            statement.execute();
+            st = cn.prepareStatement(INSERT_INTO_RESULTS);
+            st.setInt(1, loginId);
+            st.setInt(2, testId);
+            st.setDate(3, result.getDate());
+            st.setInt(4, result.getMark());
+            st.execute();
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
     }
-
 
     public static List<MeanMark> selectMeanMarks() {
 
         List<MeanMark> meanMarks = new ArrayList<>();
 
         try {
-            statement = connection.prepareStatement(SELECT_AVERAGE);
-            resultSet = statement.executeQuery();
+            st = cn.prepareStatement(SELECT_AVERAGE);
+            rs = st.executeQuery();
 
-            while (resultSet.next()) {
-                meanMarks.add(new MeanMark(resultSet.getString(1), resultSet.getDouble(2)));
+            while (rs.next()) {
+                meanMarks.add(new MeanMark(rs.getString(1), rs.getDouble(2)));
             }
 
         } catch (SQLException e) {

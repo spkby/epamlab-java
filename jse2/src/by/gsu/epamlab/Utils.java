@@ -8,7 +8,7 @@ public class Utils {
     public static java.sql.Date parseDate(String strDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        java.util.Date date = null;
+        java.util.Date date;
         try {
             date = dateFormat.parse(strDate);
         } catch (ParseException e) {
