@@ -1,7 +1,6 @@
 package by.gsu.epamlab.load;
 
 import by.gsu.epamlab.Constants;
-import by.gsu.epamlab.Utils;
 import by.gsu.epamlab.beans.Result;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -69,7 +68,7 @@ public class ResultImplXml extends DefaultHandler implements IResultDAO {
 
         if (Tags.valueOf(qName.toUpperCase()) == Tags.TEST) {
             test = attributes.getValue(TestAttributes.NAME.name().toLowerCase());
-            date = Utils.parseDate(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
+            date = java.sql.Date.valueOf(attributes.getValue(TestAttributes.DATE.name().toLowerCase()));
             int mark = (int) (Constants.DECIMAL * Double.parseDouble(attributes.getValue(TestAttributes.MARK.name().toLowerCase())));
 
             results.add(new Result(login, test, date, mark));

@@ -9,7 +9,7 @@ import java.util.List;
 public class RunnerLogic {
 
     public static void init() {
-        DAO.buildConnection();
+        //DAO.buildConnection();
         DAO.prepareDB();
     }
 

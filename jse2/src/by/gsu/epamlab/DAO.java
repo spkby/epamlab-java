@@ -10,11 +10,6 @@ import java.util.List;
 
 public class DAO {
 
-    private static final String CLASS_NAME = "sun.jdbc.odbc.JdbcOdbcDriver";
-    private static final String DB_URL = "jdbc:odbc:results";
-    private static final String DB_USER = "jse";
-    private static final String DB_PASS = "jse";
-
     private static final String INSERT_LOGIN = "INSERT INTO logins (login) values(?)";
     private static final String INSERT_TEST = "INSERT INTO tests (test) values(?)";
     private static final String INSERT_INTO_RESULTS = "INSERT INTO results (loginid, testid, dat, mark) VALUES(?,?,?,?)";
@@ -36,23 +31,8 @@ public class DAO {
     private static PreparedStatement st;
     private static ResultSet rs;
 
-    private DAO() {
-    }
-
-    public static Connection buildConnection() {
-
-        if (cn != null) {
-            return cn;
-        }
-
-        try {
-            Class.forName(CLASS_NAME);
-            cn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new IllegalStateException(e);
-        }
-
-        return cn;
+    static {
+        cn = DAOConnBuilder.getInstance().getConnection();
     }
 
     public static void close() {

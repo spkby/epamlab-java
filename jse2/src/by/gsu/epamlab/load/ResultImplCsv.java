@@ -1,7 +1,6 @@
 package by.gsu.epamlab.load;
 
 import by.gsu.epamlab.Constants;
-import by.gsu.epamlab.Utils;
 import by.gsu.epamlab.beans.Result;
 
 import java.io.FileNotFoundException;
@@ -31,7 +30,7 @@ public class ResultImplCsv implements IResultDAO {
         try {
             login = elements[0];
             test = elements[1];
-            date = Utils.parseDate(elements[2]);
+            date = java.sql.Date.valueOf(elements[2]);
             mark = (int) (Constants.DECIMAL * Double.parseDouble(elements[3]));
         } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
             throw new IllegalStateException(e);
