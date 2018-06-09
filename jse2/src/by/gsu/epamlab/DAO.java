@@ -118,16 +118,11 @@ public class DAO {
         int id = -1;
 
         try {
-            st = cn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
+            st = cn.prepareStatement(sql);
             st.setString(1, value);
             rs = st.executeQuery();
 
-            rs.last();
-            int count = rs.getRow();
-            rs.beforeFirst();
-            if (count != 0) {
-                rs.next();
+            if (rs.next()) {
                 id = rs.getInt(1);
             }
 
