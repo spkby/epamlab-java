@@ -83,14 +83,17 @@ public class Runner {
 
     private static Trial clone(Trial t) {
         Trial trial = null;
-        if (t.getClass() == Trial.class) {
-            trial = new Trial(t.getName(), t.getMark1(), t.getMark2());
-        } else if (t.getClass() == LightTrial.class) {
-            trial = new LightTrial(t.getName(), t.getMark1(), t.getMark2());
-        } else if (t.getClass() == StrongTrial.class) {
-            trial = new StrongTrial(t.getName(), t.getMark1(), t.getMark2());
-        } else if (t.getClass() == ExtraTrial.class) {
-            trial = new ExtraTrial(t.getName(), t.getMark1(), t.getMark2(), ((ExtraTrial) t).getMark3());
+
+        if (t != null) {
+            if (t instanceof ExtraTrial) {
+                trial = new ExtraTrial(t.getName(), t.getMark1(), t.getMark2(), ((ExtraTrial) t).getMark3());
+            } else if (t instanceof LightTrial) {
+                trial = new LightTrial(t.getName(), t.getMark1(), t.getMark2());
+            } else if (t instanceof StrongTrial) {
+                trial = new StrongTrial(t.getName(), t.getMark1(), t.getMark2());
+            } else {
+                trial = new Trial(t.getName(), t.getMark1(), t.getMark2());
+            }
         }
         return trial;
     }
