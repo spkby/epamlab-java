@@ -12,6 +12,8 @@ public class Runner {
 
     public static void main(String[] args) {
 
+        // 1
+
         List<Trial> trials = new ArrayList<>(Arrays.asList(
                 new Trial("Trial1", 45, 93),
                 new Trial("Trial2", 51, 35),
@@ -31,19 +33,17 @@ public class Runner {
 
         trials.forEach(System.out::println);
 
-
         System.out.println("\n" + 3);
 
         trials.stream()
                 .filter(Trial::isPassed)
                 .forEach(System.out::println);
 
-        System.out.println("\n" + 4);
+        // 4
 
         trials = trials.stream()
                 .sorted((x, y) -> (x.getMark1() + x.getMark2()) - (y.getMark1() + y.getMark2()))
                 .collect(Collectors.toList());
-        trials.forEach(System.out::println);
 
         System.out.println("\n" + 5);
 
@@ -63,7 +63,7 @@ public class Runner {
         faildTrials.forEach(t -> {
             t.setMark1(0);
             t.setMark2(0);
-            if (t.getClass() == ExtraTrial.class) {
+            if (t instanceof ExtraTrial) {
                 ((ExtraTrial) t).setMark3(0);
             }
         });
