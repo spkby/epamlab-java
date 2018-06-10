@@ -40,9 +40,10 @@ public class Runner {
 
         System.out.println("\n" + 4);
 
-        trials.stream()
+        trials = trials.stream()
                 .sorted((x, y) -> (x.getMark1() + x.getMark2()) - (y.getMark1() + y.getMark2()))
-                .forEach(System.out::println);
+                .collect(Collectors.toList());
+        trials.forEach(System.out::println);
 
         System.out.println("\n" + 5);
 
@@ -57,7 +58,7 @@ public class Runner {
                 .map(Runner::clone)
                 .collect(Collectors.toList());
 
-        System.out.println("All trials are failed: "+trials.stream().noneMatch(Trial::isPassed));
+        System.out.println("All trials are failed: " + trials.stream().noneMatch(Trial::isPassed));
 
         faildTrials.forEach(t -> {
             t.setMark1(0);
@@ -71,16 +72,14 @@ public class Runner {
 
         System.out.println("\n" + 7);
 
-        Integer[] sums = (Integer[]) trials.stream()
+        Object[] sums = trials.stream()
                 .map(x -> x.getMark1() + x.getMark2())
                 .toArray();
 
         Arrays.stream(sums)
-                .map(l -> Integer.toString(l))
                 .reduce((x, y) -> x + ", " + y)
                 .ifPresent(System.out::println);
     }
-
 
     private static Trial clone(Trial t) {
         Trial trial = null;
