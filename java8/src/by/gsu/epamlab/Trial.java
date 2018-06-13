@@ -6,8 +6,7 @@ public class Trial {
     private int mark2;
     protected static final int PASS_MARK = 130;
 
-    public Trial() {
-    }
+    public Trial() {}
 
     public Trial(String name, int mark1, int mark2) {
         super();

@@ -1,7 +1,4 @@
-import by.gsu.epamlab.ExtraTrial;
-import by.gsu.epamlab.LightTrial;
-import by.gsu.epamlab.StrongTrial;
-import by.gsu.epamlab.Trial;
+import by.gsu.epamlab.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +10,7 @@ public class Runner {
     public static void main(String[] args) {
 
         // 1
-
-        List<Trial> trials = new ArrayList<>(Arrays.asList(
-                new Trial("Trial1", 45, 93),
+        List<Trial> trials = new ArrayList<>(Arrays.asList(new Trial("Trial1", 45, 93),
                 new Trial("Trial2", 51, 35),
                 new Trial("Trial3", 55, 46),
 
@@ -26,36 +21,38 @@ public class Runner {
                 new StrongTrial("StrongTrial2", 89, 75),
 
                 new ExtraTrial("ExtraTrial1", 46, 69, 78),
-                new ExtraTrial("ExtraTrial2", 75, 77, 79)
-        ));
+                new ExtraTrial("ExtraTrial2", 75, 77, 79)));
 
+        // 2
         System.out.println(2);
 
         trials.forEach(System.out::println);
 
+        // 3
         System.out.println("\n" + 3);
 
-        trials.stream()
+        System.out.println(trials.stream()
                 .filter(Trial::isPassed)
-                .forEach(System.out::println);
+                .count());
 
         // 4
-
         trials = trials.stream()
                 .sorted((x, y) -> (x.getMark1() + x.getMark2()) - (y.getMark1() + y.getMark2()))
                 .collect(Collectors.toList());
 
+        // 5
         System.out.println("\n" + 5);
 
         trials.stream()
                 .map((x) -> x.getMark2() + x.getMark1())
                 .forEach(System.out::println);
 
+        // 6
         System.out.println("\n" + 6);
 
         List<Trial> faildTrials = trials.stream()
                 .filter(t -> !t.isPassed())
-                .map(Runner::clone)
+                .map(TrialsFactory::getTrialFromFactory)
                 .collect(Collectors.toList());
 
         System.out.println("All trials are failed: " + trials.stream().noneMatch(Trial::isPassed));
@@ -70,31 +67,16 @@ public class Runner {
 
         faildTrials.forEach(System.out::println);
 
+        // 7
         System.out.println("\n" + 7);
 
-        Object[] sums = trials.stream()
-                .map(x -> x.getMark1() + x.getMark2())
+        int[] sums = trials.stream()
+                .mapToInt(x -> x.getMark1() + x.getMark2())
                 .toArray();
 
         Arrays.stream(sums)
+                .mapToObj(Integer::toString)
                 .reduce((x, y) -> x + ", " + y)
                 .ifPresent(System.out::println);
-    }
-
-    private static Trial clone(Trial t) {
-        Trial trial = null;
-
-        if (t != null) {
-            if (t instanceof ExtraTrial) {
-                trial = new ExtraTrial(t.getName(), t.getMark1(), t.getMark2(), ((ExtraTrial) t).getMark3());
-            } else if (t instanceof LightTrial) {
-                trial = new LightTrial(t.getName(), t.getMark1(), t.getMark2());
-            } else if (t instanceof StrongTrial) {
-                trial = new StrongTrial(t.getName(), t.getMark1(), t.getMark2());
-            } else {
-                trial = new Trial(t.getName(), t.getMark1(), t.getMark2());
-            }
-        }
-        return trial;
     }
 }
