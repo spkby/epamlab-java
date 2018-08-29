@@ -29,6 +29,8 @@ public class HolidayController extends AbstractController {
 
         model = accountForJSP(login, model);
 
+        model.addAttribute("list", true);
+
         switch (Security.getRoleId(login)) {
             case LEAD:
                 model.addAttribute("holidays", holidayDAO.getListByDepartment(accountDAO
@@ -52,6 +54,8 @@ public class HolidayController extends AbstractController {
        /* if (!Security.checkLoginToEmployeeId(login, id)) {
             return "redirect:/login";
         }*/
+
+        model.addAttribute("account", accountDAO.getById(id));
 
         model.addAttribute("holidays", holidayDAO.getListByEmployee(new EmployeeDAO().getById(id)));
 

@@ -14,7 +14,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${pageContext.request.getAttribute('holidays')}" var="holiday">
+                <c:forEach items="${holidays}" var="holiday">
                     <tr>
                         <td>${holiday.employee.name}</td>
                         <td>${holiday.dateFrom}</td>
@@ -26,8 +26,11 @@
                 </tbody>
             </table>
         </c:if>
-        <a href="<c:url value="/holiday/add"/>" class="btn btn-success btn-block" role="button"
-           aria-pressed="true">Add Holiday</a>
+
+        <c:if test="${list != true && currAccount.id == account.id}">
+            <a href="<c:url value="/holiday/add"/>" class="btn btn-success btn-block" role="button"
+               aria-pressed="true">Add Holiday</a>
+        </c:if>
 
     </div>
 </div>

@@ -45,8 +45,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-01"));
-            holiday.setDateTo(Date.valueOf("2018-08-11"));
+            holiday.setDateFrom(Date.valueOf("2018-10-01"));
+            holiday.setDateTo(Date.valueOf("2018-10-11"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -71,8 +71,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-02"));
-            holiday.setDateTo(Date.valueOf("2018-08-12"));
+            holiday.setDateFrom(Date.valueOf("2018-10-02"));
+            holiday.setDateTo(Date.valueOf("2018-10-12"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -82,7 +82,7 @@ public class FillSampesUtil {
             salaryDAO.add(salary);
 
             employee = new Employee();
-            employee.setBirthday(Date.valueOf("1991-01-03"));
+            employee.setBirthday(Date.valueOf("1991-10-03"));
             employee.setName("Employee 3");
             employee.setRole(roleDAO.getById(2));
             employee.setDepartment(departmentDAO.getById(2));
@@ -97,8 +97,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-03"));
-            holiday.setDateTo(Date.valueOf("2018-08-13"));
+            holiday.setDateFrom(Date.valueOf("2018-10-03"));
+            holiday.setDateTo(Date.valueOf("2018-10-13"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -123,8 +123,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-04"));
-            holiday.setDateTo(Date.valueOf("2018-08-14"));
+            holiday.setDateFrom(Date.valueOf("2018-10-04"));
+            holiday.setDateTo(Date.valueOf("2018-10-14"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -149,8 +149,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-05"));
-            holiday.setDateTo(Date.valueOf("2018-08-15"));
+            holiday.setDateFrom(Date.valueOf("2018-10-05"));
+            holiday.setDateTo(Date.valueOf("2018-10-15"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -175,8 +175,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-06"));
-            holiday.setDateTo(Date.valueOf("2018-08-16"));
+            holiday.setDateFrom(Date.valueOf("2018-10-06"));
+            holiday.setDateTo(Date.valueOf("2018-10-16"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -201,8 +201,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-07"));
-            holiday.setDateTo(Date.valueOf("2018-08-17"));
+            holiday.setDateFrom(Date.valueOf("2018-10-07"));
+            holiday.setDateTo(Date.valueOf("2018-10-17"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
 
@@ -227,8 +227,8 @@ public class FillSampesUtil {
 
             holiday = new Holiday();
             holiday.setEmployee(employee);
-            holiday.setDateFrom(Date.valueOf("2018-08-08"));
-            holiday.setDateTo(Date.valueOf("2018-08-18"));
+            holiday.setDateFrom(Date.valueOf("2018-10-08"));
+            holiday.setDateTo(Date.valueOf("2018-10-18"));
             holiday.setStatus(statusDAO.getById(1));
             holidayDAO.add(holiday);
         } finally {
