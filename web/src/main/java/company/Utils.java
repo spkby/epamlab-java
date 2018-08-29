@@ -15,7 +15,7 @@ public class Utils {
         }
     }
 
-    public static boolean date2IsMoreThanDate1(String date1, String date2) {
+    public static boolean dateTwoIsMoreThanDateOne(String date1, String date2) {
         try {
             return getDate(date1).compareTo(getDate(date2)) >= 0;
         } catch (IllegalArgumentException e) {
@@ -25,7 +25,7 @@ public class Utils {
 
     public static boolean dateIsMoreThanToday(String date) {
         try {
-            return date2IsMoreThanDate1(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()), date);
+            return dateTwoIsMoreThanDateOne(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()), date);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(INVALID_DATE_FORMAT);
         }

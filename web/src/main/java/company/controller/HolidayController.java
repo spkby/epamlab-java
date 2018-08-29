@@ -108,7 +108,7 @@ public class HolidayController extends AbstractController {
                 errorMsg.append(DATE_FROM_BEFORE_TODAY);
             }
 
-            if (Utils.date2IsMoreThanDate1(dateFrom, dateTo)) {
+            if (Utils.dateTwoIsMoreThanDateOne(dateFrom, dateTo)) {
                 isError = true;
                 if (errorMsg.length() == 0) {
                     errorMsg.append(SPACE);
@@ -173,7 +173,7 @@ public class HolidayController extends AbstractController {
                 errorMsg.append(DATE_FROM_BEFORE_TODAY);
             }
 
-            if (Utils.date2IsMoreThanDate1(dateFrom, dateTo)) {
+            if (Utils.dateTwoIsMoreThanDateOne(dateFrom, dateTo)) {
                 isError = true;
                 if (errorMsg.length() == 0) {
                     errorMsg.append(SPACE);
