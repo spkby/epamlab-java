@@ -1,7 +1,10 @@
 package company.model;
 
+
 import javax.persistence.*;
 import java.sql.Date;
+
+import static company.Constants.*;
 
 @Entity
 @Table(name = "employee")
@@ -67,38 +70,38 @@ public class Employee {
 
     public void setName(String name) {
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Invalid employee name: empty");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_NAME + EMPTY);
         }
         if (name.length() > 50) {
-            throw new IllegalArgumentException("Invalid employee name: length more 50");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_NAME + LENGTH_MORE_50);
         }
         this.name = name;
     }
 
     public void setBirthday(Date birthday) {
         if (birthday == null) {
-            throw new IllegalArgumentException("Invalid employee birthday: null");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_BIRTHDAY + STRING_NULL);
         }
         this.birthday = birthday;
     }
 
     public void setRole(Role role) {
         if (role == null) {
-            throw new IllegalArgumentException("Invalid employee role: null");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_ROLE + STRING_NULL);
         }
         this.role = role;
     }
 
     public void setDepartment(Department department) {
         if (department == null) {
-            throw new IllegalArgumentException("Invalid employee department: null");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_DEPARTMENT + STRING_NULL);
         }
         this.department = department;
     }
 
     public void setSalary(Salary salary) {
         if (salary == null) {
-            throw new IllegalArgumentException("Invalid employee salary: null");
+            throw new IllegalArgumentException(INVALID_EMPLOYEE_SALARY + STRING_NULL);
         }
         this.salary = salary;
     }

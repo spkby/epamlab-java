@@ -1,5 +1,6 @@
 package company.DAO;
 
+import company.Constants;
 import company.Hibernate.SessionUtil;
 import company.model.Account;
 import company.model.Department;
@@ -24,12 +25,12 @@ public class DepartmentDAO extends SessionUtil implements IDAO<Department> {
 
     @Override
     public void remove(int id) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(Constants.NO_METHOD);
     }
 
     @Override
     public void update(Department department) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(Constants.NO_METHOD);
     }
 
     @Override

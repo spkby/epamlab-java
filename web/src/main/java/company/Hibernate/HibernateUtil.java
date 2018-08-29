@@ -1,5 +1,6 @@
 package company.Hibernate;
 
+import company.Constants;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -12,7 +13,7 @@ public class HibernateUtil {
         try {
             return new Configuration().configure().buildSessionFactory();
         } catch (Throwable e) {
-            System.err.println("Initial SessionFactory creation failed " + e);
+            System.err.println(Constants.INITIAL_SESSION_FACTORY_CREATION_FAILED + e);
             throw new ExceptionInInitializerError(e);
         }
     }

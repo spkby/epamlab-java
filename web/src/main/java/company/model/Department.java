@@ -2,6 +2,8 @@ package company.model;
 
 import javax.persistence.*;
 
+import static company.Constants.*;
+
 @Entity
 @Table(name = "department")
 public class Department {
@@ -34,10 +36,10 @@ public class Department {
 
     public void setName(String name) {
         if (name.isEmpty()) {
-            throw new IllegalArgumentException("Invalid department name: empty");
+            throw new IllegalArgumentException(INVALID_DEPARTMENT_NAME + EMPTY);
         }
         if (name.length() > 10) {
-            throw new IllegalArgumentException("Invalid department name: length more 10");
+            throw new IllegalArgumentException(INVALID_DEPARTMENT_NAME + LENGTH_MORE_20);
         }
         this.name = name;
     }

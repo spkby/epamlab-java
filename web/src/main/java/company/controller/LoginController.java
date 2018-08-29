@@ -1,5 +1,7 @@
 package company.controller;
 
+import static company.Constants.*;
+
 import company.DAO.AccountDAO;
 import company.model.Account;
 import org.springframework.stereotype.Controller;
@@ -16,28 +18,28 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+    @GetMapping(SLASH + LOGIN)
+    public String login(@RequestParam(value = ERROR, required = false) String error, Model model) {
 
         if (error != null && !error.isEmpty()) {
-            model.addAttribute("error", true);
+            model.addAttribute(ERROR, true);
         }
-        return "login";
+        return LOGIN;
     }
 
-    @PostMapping("/login")
+    @PostMapping(SLASH + LOGIN)
     public String doLogin(@ModelAttribute Account acc, HttpServletResponse resp) {
 
         Account account = new AccountDAO().getAccountByLogin(acc.getLogin());
 
         if (account != null && account.getPass().equals(acc.getPass())) {
-            Cookie cookie = new Cookie("login", account.getLogin());
-            cookie.setPath("/");
+            Cookie cookie = new Cookie(LOGIN, account.getLogin());
+            cookie.setPath(SLASH);
             cookie.setMaxAge(3600);
             resp.addCookie(cookie);
-            return "redirect:/";
+            return REDIRECT + SLASH;
         } else {
-            return "redirect:/login?error=Invalid login or password";
+            return REDIRECT + SLASH + LOGIN + "?" + ERROR + "=" + INVALID_LOGIN_OR_PASSWORD;
         }
     }
 
@@ -47,12 +49,12 @@ public class LoginController {
         Cookie[] cookies = req.getCookies();
         if (cookies != null)
             for (Cookie cookie : cookies) {
-                cookie.setValue("");
-                cookie.setPath("/");
+                cookie.setValue(NO_SPACE);
+                cookie.setPath(SLASH);
                 cookie.setMaxAge(0);
                 resp.addCookie(cookie);
             }
 
-        return "redirect:/";
+        return REDIRECT + SLASH;
     }
 }

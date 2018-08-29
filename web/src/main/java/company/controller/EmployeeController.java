@@ -8,6 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+import static company.Constants.*;
+
+
 @Controller
 public class EmployeeController extends AbstractController {
 
