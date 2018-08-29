@@ -38,7 +38,7 @@ public abstract class AbstractFilter extends HttpFilter {
         } else {
             res.setStatus(401);
             res.getWriter().println("Forbidden");
-            res.sendRedirect("/login");
+            req.getRequestDispatcher("/login").forward(req, res);
         }
     }
 
