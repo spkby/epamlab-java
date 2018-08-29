@@ -38,9 +38,9 @@ public abstract class AbstractFilter extends HttpFilter {
         if (isLogged && isLevelOK(account.getLogin(), req.getRequestURI())) {
             chain.doFilter(req, res);
         } else {
-            res.setStatus(SERVER_STATUS_401);
+            res.setStatus(401);
             res.getWriter().println(FORBIDDEN);
-            req.getRequestDispatcher(SLASH + LOGIN).forward(req, res);
+            req.getRequestDispatcher("/login").forward(req, res);
         }
     }
 

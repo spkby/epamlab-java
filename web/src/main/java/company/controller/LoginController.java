@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
-    @GetMapping(SLASH + LOGIN)
+    @GetMapping("/login")
     public String login(@RequestParam(value = ERROR, required = false) String error, Model model) {
 
         if (error != null && !error.isEmpty()) {
@@ -27,7 +27,7 @@ public class LoginController {
         return LOGIN;
     }
 
-    @PostMapping(SLASH + LOGIN)
+    @PostMapping("/login")
     public String doLogin(@ModelAttribute Account acc, HttpServletResponse resp) {
 
         Account account = new AccountDAO().getAccountByLogin(acc.getLogin());
@@ -37,9 +37,9 @@ public class LoginController {
             cookie.setPath(SLASH);
             cookie.setMaxAge(3600);
             resp.addCookie(cookie);
-            return REDIRECT + SLASH;
+            return "redirect:/";
         } else {
-            return REDIRECT + SLASH + LOGIN + "?" + ERROR + "=" + INVALID_LOGIN_OR_PASSWORD;
+            return "redirect:/login?error=" + INVALID_LOGIN_OR_PASSWORD;
         }
     }
 
@@ -55,6 +55,6 @@ public class LoginController {
                 resp.addCookie(cookie);
             }
 
-        return REDIRECT + SLASH;
+        return "redirect:/";
     }
 }

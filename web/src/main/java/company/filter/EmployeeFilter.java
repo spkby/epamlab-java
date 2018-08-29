@@ -2,9 +2,7 @@ package company.filter;
 
 import javax.servlet.annotation.WebFilter;
 
-import static company.Constants.*;
-
-@WebFilter(SLASH + EMPLOYEE + SLASH + ASTERISK)
+@WebFilter("/employee/*")
 public class EmployeeFilter extends AbstractFilter {
 
     @Override

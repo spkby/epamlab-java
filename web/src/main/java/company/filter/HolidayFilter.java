@@ -6,9 +6,11 @@ import javax.servlet.annotation.WebFilter;
 
 import static company.Constants.*;
 
-
-@WebFilter(SLASH + HOLIDAY + SLASH + ASTERISK)
+@WebFilter("/holiday/*")
 public class HolidayFilter extends AbstractFilter {
+
+    private static final String EMPLOYEE = "employee";
+    private static final String VIEW = "view";
 
     @Override
     protected boolean isLevelOK(String login, String path) {

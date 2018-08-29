@@ -9,11 +9,11 @@ import static company.Constants.*;
 @Controller
 public class MainController extends AbstractController{
 
-    @GetMapping(SLASH)
+    @GetMapping("/")
     public String index(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
-        return INDEX;
+        return "index";
     }
 }

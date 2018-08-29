@@ -4,12 +4,10 @@ import company.Security;
 
 import javax.servlet.annotation.WebFilter;
 
-import static company.Constants.*;
-
-@WebFilter(SLASH + DEPARTMENT + SLASH + ASTERISK)
+@WebFilter("/department/*")
 public class DepartmentFilter extends AbstractFilter {
 
-    private static final String DEPARTMENT_VIEW = SLASH + DEPARTMENT + SLASH + VIEW + SLASH;
+    private static final String DEPARTMENT_VIEW = "/department/view/";
     private static final int DEPARTMENT_VIEW_LENGTH = DEPARTMENT_VIEW.length();
 
     @Override

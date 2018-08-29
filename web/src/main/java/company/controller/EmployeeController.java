@@ -15,11 +15,11 @@ import static company.Constants.*;
 @Controller
 public class EmployeeController extends AbstractController {
 
-    private static AccountDAO accountDAO = new AccountDAO();
-    private static DepartmentDAO departmentDAO = new DepartmentDAO();
-    private static EmployeeDAO employeeDAO = new EmployeeDAO();
-    private static RoleDAO roleDAO = new RoleDAO();
-    private static SalaryDAO salaryDAO = new SalaryDAO();
+    private static final AccountDAO accountDAO = new AccountDAO();
+    private static final DepartmentDAO departmentDAO = new DepartmentDAO();
+    private static final EmployeeDAO employeeDAO = new EmployeeDAO();
+    private static final RoleDAO roleDAO = new RoleDAO();
+    private static final SalaryDAO salaryDAO = new SalaryDAO();
 
     @GetMapping("/employee")
     public String root() {
@@ -27,12 +27,12 @@ public class EmployeeController extends AbstractController {
     }
 
     @GetMapping("/employee/list")
-    public String list(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String list(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
         if (Security.getRoleId(login) == Security.RoleId.MANAGER) {
-            model.addAttribute("employees", employeeDAO.getList());
+            model.addAttribute(EMPLOYEES, employeeDAO.getList());
             return "employee/list";
         } else if (Security.getRoleId(login) == Security.RoleId.LEAD) {
             return "redirect:/department/view/";
@@ -47,26 +47,26 @@ public class EmployeeController extends AbstractController {
     }
 
     @GetMapping("/employee/view/")
-    public String view(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String view(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         return "redirect:/employee/view/" + accountDAO.getAccountByLogin(login).getEmployee().getId();
     }
 
     @GetMapping("/employee/view/{id}")
-    public String viewById(@CookieValue(value = "login", defaultValue = "") String login,
-                           @PathVariable(value = "id") int id, Model model) {
+    public String viewById(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
+                           @PathVariable(value = ID) int id, Model model) {
         model = accountForJSP(login, model);
 
         if (!Security.checkLoginToEmployeeId(login, id)) {
             return "redirect:/login";
         }
 
-        model.addAttribute("account", accountDAO.getAccountByEmployee(employeeDAO.getById(id)));
+        model.addAttribute(ACCOUNT, accountDAO.getAccountByEmployee(employeeDAO.getById(id)));
         return "employee/view";
     }
 
     @GetMapping("/employee/add")
-    public String add(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String add(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
@@ -74,14 +74,14 @@ public class EmployeeController extends AbstractController {
             return "redirect:/login";
         }
 
-        model.addAttribute("departments", departmentDAO.getList());
-        model.addAttribute("roles", roleDAO.getList());
+        model.addAttribute(DEPARTMENTS, departmentDAO.getList());
+        model.addAttribute(ROLES, roleDAO.getList());
 
         return "/employee/add";
     }
 
     @PostMapping("/employee/add")
-    public String add(@CookieValue(value = "login", defaultValue = "") String login,
+    public String add(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                       @ModelAttribute AccountEmployeeSalary employeeAdd) {
 
         if (!(Security.getRoleId(login) == Security.RoleId.MANAGER)) {
@@ -91,17 +91,16 @@ public class EmployeeController extends AbstractController {
         boolean isError = false;
         StringBuilder errorMsg = new StringBuilder();
 
-
         try {
             employeeAdd.create();
         } catch (IllegalArgumentException e) {
             isError = true;
-            errorMsg.append(e.getMessage()).append("\n");
+            errorMsg.append(e.getMessage()).append(NEXT_STRING);
         }
 
         if (!isError && accountDAO.loginIsExist(employeeAdd.account.getLogin())) {
             isError = true;
-            errorMsg.append("account with login '").append(employeeAdd.account.getLogin()).append("' already exist.").append("\n");
+            errorMsg.append(ACCOUNT_WITH_LOGIN).append(employeeAdd.account.getLogin()).append(ALREADY_EXIST).append(NEXT_STRING);
         }
 
         if (!isError) {
@@ -116,8 +115,8 @@ public class EmployeeController extends AbstractController {
     }
 
     @GetMapping("/employee/edit/{id}")
-    public String edit(@CookieValue(value = "login", defaultValue = "") String login,
-                       @PathVariable(value = "id") int id, Model model) {
+    public String edit(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
+                       @PathVariable(value = ID) int id, Model model) {
 
         model = accountForJSP(login, model);
 
@@ -125,17 +124,15 @@ public class EmployeeController extends AbstractController {
             return "redirect:/login";
         }
 
-        model.addAttribute("departments", departmentDAO.getList());
-        model.addAttribute("roles", roleDAO.getList());
-
-        //model.addAttribute("employee", employee);
-        model.addAttribute("account", accountDAO.getAccountByEmployee(employeeDAO.getById(id)));
+        model.addAttribute(DEPARTMENTS, departmentDAO.getList());
+        model.addAttribute(ROLES, roleDAO.getList());
+        model.addAttribute(ACCOUNT, accountDAO.getAccountByEmployee(employeeDAO.getById(id)));
 
         return "/employee/edit";
     }
 
     @PostMapping("/employee/edit")
-    public String edit(@CookieValue(value = "login", defaultValue = "") String login,
+    public String edit(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                        @RequestParam(value = "currLogin") String currLogin,
                        @ModelAttribute AccountEmployeeSalary employeeEdit) {
 
@@ -150,14 +147,14 @@ public class EmployeeController extends AbstractController {
             employeeEdit.get();
         } catch (IllegalArgumentException e) {
             isError = true;
-            errorMsg.append(e.getMessage()).append("\n");
+            errorMsg.append(e.getMessage()).append(NEXT_STRING);
         }
 
         if (!isError && accountDAO.loginIsExist(employeeEdit.account.getLogin())) {
             if (!employeeEdit.account.getLogin().equals(currLogin)) {
                 isError = true;
-                errorMsg.append("account with login '").append(employeeEdit.account.getLogin())
-                        .append("' already exist.").append("\n");
+                errorMsg.append(ACCOUNT_WITH_LOGIN).append(employeeEdit.account.getLogin())
+                        .append(ALREADY_EXIST).append(NEXT_STRING);
             }
         }
 
@@ -173,15 +170,15 @@ public class EmployeeController extends AbstractController {
     }
 
     @GetMapping("/employee/delete")
-    public String delete(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String delete(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
-        return "error";
+        return ERROR;
     }
 
     @PostMapping("/employee/delete")
-    public String delete(@CookieValue(value = "login", defaultValue = "") String login,
+    public String delete(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                          @RequestParam(value = "employee_id") String id) {
 
         if (!(Security.getRoleId(login) == Security.RoleId.MANAGER)) {

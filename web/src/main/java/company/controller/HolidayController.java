@@ -18,21 +18,21 @@ import static company.Constants.*;
 @Controller
 public class HolidayController extends AbstractController {
 
-    private static AccountDAO accountDAO = new AccountDAO();
-    private static HolidayDAO holidayDAO = new HolidayDAO();
-    private static StatusDAO statusDAO = new StatusDAO();
+    private static final AccountDAO accountDAO = new AccountDAO();
+    private static final HolidayDAO holidayDAO = new HolidayDAO();
+    private static final StatusDAO statusDAO = new StatusDAO();
 
-    @GetMapping(SLASH + HOLIDAY)
+    @GetMapping("/holiday")
     public String root() {
-        return REDIRECT + SLASH + HOLIDAY + SLASH + LIST;
+        return "redirect:/holiday/list";
     }
 
-    @GetMapping(SLASH + HOLIDAY + SLASH + LIST)
+    @GetMapping("/holiday/list")
     public String list(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
-        model.addAttribute(LIST, true);
+        model.addAttribute("list", true);
 
         switch (Security.getRoleId(login)) {
             case LEAD:
@@ -42,13 +42,13 @@ public class HolidayController extends AbstractController {
                 model.addAttribute(HOLIDAYS, holidayDAO.getList());
                 break;
             default:
-                return REDIRECT + SLASH + HOLIDAY + SLASH + EMPLOYEE + SLASH + accountDAO.getAccountByLogin(login).getEmployee().getId();
+                return "redirect:/holiday/employee/" + accountDAO.getAccountByLogin(login).getEmployee().getId();
         }
-        return HOLIDAY + SLASH + LIST;
+        return "holiday/list";
     }
 
-    @GetMapping(SLASH + HOLIDAY + SLASH + EMPLOYEE + SLASH + _ID)
-    public String employee(@CookieValue(value = LOGIN, defaultValue = "") String login,
+    @GetMapping("/holiday/employee/{id}")
+    public String employee(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                            @PathVariable(value = ID) int id, Model model) {
 
         model = accountForJSP(login, model);
@@ -61,16 +61,26 @@ public class HolidayController extends AbstractController {
 
         model.addAttribute(HOLIDAYS, holidayDAO.getListByEmployee(new EmployeeDAO().getById(id)));
 
-        return HOLIDAY + SLASH + LIST;
+        return "holiday/list";
     }
 
-    @GetMapping(HOLIDAY + SLASH + VIEW + SLASH)
+    @GetMapping("/holiday/employee")
+    public String employee_() {
+        return "redirect:/holiday/list";
+    }
+
+    @GetMapping("/holiday/view")
+    public String view_() {
+        return "redirect:/holiday/view/";
+    }
+
+    @GetMapping("/holiday/view/")
     public String view(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login) {
 
-        return REDIRECT + SLASH + HOLIDAY + SLASH + EMPLOYEE + SLASH + accountDAO.getAccountByLogin(login).getEmployee().getId();
+        return "redirect:/holiday/employee/" + accountDAO.getAccountByLogin(login).getEmployee().getId();
     }
 
-    @GetMapping(SLASH + HOLIDAY + SLASH + VIEW + SLASH + _ID)
+    @GetMapping("/holiday/view/{id}")
     public String viewById(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                            @PathVariable(value = ID) int id, Model model) {
         model = accountForJSP(login, model);
@@ -80,19 +90,19 @@ public class HolidayController extends AbstractController {
         }*/
 
         model.addAttribute(HOLIDAY, holidayDAO.getById(id));
-        return HOLIDAY + SLASH + VIEW;
+        return "holiday/view";
     }
 
-    @GetMapping(SLASH + HOLIDAY + SLASH + ADD)
+    @GetMapping("/holiday/add")
     public String getAdd(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
-        return SLASH + HOLIDAY + SLASH + ADD;
+        return "holiday/add";
     }
 
-    @PostMapping(SLASH + HOLIDAY + SLASH + ADD)
-    public String addEmployee(@CookieValue(value = LOGIN, defaultValue = "") String login,
+    @PostMapping("/holiday/add")
+    public String addEmployee(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                               @RequestParam(value = DATE_FROM) String dateFrom,
                               @RequestParam(value = DATE_TO) String dateTo) {
 
@@ -130,9 +140,9 @@ public class HolidayController extends AbstractController {
 
         if (!isError) {
             holidayDAO.add(holiday);
-            return REDIRECT + SLASH + HOLIDAY + SLASH + LIST;
+            return "redirect:/holiday/list";
         } else {
-            return REDIRECT + SLASH + HOLIDAY + SLASH + ADD + "?" + ERROR + "=" + errorMsg.toString();
+            return "redirect:/holiday/add?error=" + errorMsg.toString();
         }
     }
 
@@ -155,7 +165,7 @@ public class HolidayController extends AbstractController {
     public String editEmployee(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
                                @RequestParam(value = DATE_FROM) String dateFrom,
                                @RequestParam(value = DATE_TO) String dateTo,
-                               @RequestParam(value = HOLIDAY + DASH + ID) String id) {
+                               @RequestParam(value = HOLIDAY_ID) String id) {
 
         int holidayId = Integer.parseInt(id);
 /*
@@ -187,7 +197,7 @@ public class HolidayController extends AbstractController {
 
         } catch (IllegalArgumentException e) {
             isError = true;
-            errorMsg.append(e.getMessage()).append("\n");
+            errorMsg.append(e.getMessage()).append(NEXT_STRING);
         }
 
         if (!isError) {
@@ -195,12 +205,12 @@ public class HolidayController extends AbstractController {
 
             return "redirect:/holiday/view/" + holiday.getId();
         } else {
-            return "redirect:/holiday/edit/" + holiday.getId() + "?" + ERROR + "=" + errorMsg.toString();
+            return "redirect:/holiday/edit/" + holiday.getId() + "?error=" + errorMsg.toString();
         }
     }
 
     @GetMapping("/holiday/delete")
-    public String getDelete(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String getDelete(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
@@ -208,8 +218,8 @@ public class HolidayController extends AbstractController {
     }
 
     @PostMapping("/holiday/accepted")
-    public String accepted(@CookieValue(value = "login", defaultValue = "") String login,
-                           @RequestParam(value = "holiday_id") String id) {
+    public String accepted(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
+                           @RequestParam(value = HOLIDAY_ID) String id) {
 
         return changeStatus(Integer.parseInt(id), new StatusDAO().getById(2), login);
     }
@@ -230,19 +240,19 @@ public class HolidayController extends AbstractController {
 
     @PostMapping("/holiday/denied")
     public String denied(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
-                         @RequestParam(value = HOLIDAY + DASH + ID) String id) {
+                         @RequestParam(value = HOLIDAY_ID) String id) {
 
         return changeStatus(Integer.parseInt(id), new StatusDAO().getById(3), login);
     }
 
     @PostMapping("/holiday/delete")
     public String add(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
-                      @RequestParam(value = HOLIDAY + DASH + ID) String id) {
+                      @RequestParam(value = HOLIDAY_ID) String id) {
 
         int holidayId = Integer.parseInt(id);
 
         if (!Security.checkLoginToHolidayId(login, holidayId)) {
-            return REDIRECT + SLASH + LOGIN;
+            return "redirect:/login";
         }
 
         boolean isError = false;
@@ -258,7 +268,7 @@ public class HolidayController extends AbstractController {
         if (!isError) {
             return "redirect:/holiday/view/" + holidayId;
         } else {
-            return "redirect:/holiday/edit/" + holidayId + "?" + ERROR + "=" + errorMsg.toString();
+            return "redirect:/holiday/edit/" + holidayId + "?error=" + errorMsg.toString();
         }
     }
 
