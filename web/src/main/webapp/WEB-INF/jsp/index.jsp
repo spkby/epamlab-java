@@ -3,15 +3,14 @@
 
 <div class="jumbotron">
     <div class="container">
-        <c:choose>
-            <c:when test="${currAccount != null}">
-                <h2>Hello ${currAccount.employee.name}</h2>
-            </c:when>
-            <c:otherwise>
-                <h2>Hello Guest</h2>
-                <a href="/login">Login</a>
-            </c:otherwise>
-        </c:choose>
+        <c:set var="login" value="Guest"/>
+        <c:if test="${currAccount ne null}" var="isLogged">
+            <c:set var="login" value="${currAccount.employee.name}"/>
+        </c:if>
+        <h2>Hello ${login}</h2>
+        <c:if test="${!isLogged}">
+            <a href="/login">Login</a>
+        </c:if>
     </div>
 </div>
 <%@ include file="footer.jsp" %>
