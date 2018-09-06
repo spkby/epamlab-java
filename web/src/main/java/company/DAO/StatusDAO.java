@@ -6,6 +6,8 @@ import org.hibernate.Session;
 
 import java.util.List;
 
+import static company.Constants.*;
+
 public class StatusDAO extends SessionUtil implements IDAO<Status> {
 
     private Session session;
@@ -22,12 +24,12 @@ public class StatusDAO extends SessionUtil implements IDAO<Status> {
 
     @Override
     public void remove(int id) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(NO_METHOD);
     }
 
     @Override
     public void update(Status status) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(NO_METHOD);
     }
 
     @Override

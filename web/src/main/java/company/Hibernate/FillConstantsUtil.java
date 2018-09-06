@@ -1,5 +1,6 @@
 package company.Hibernate;
 
+import static company.Constants.*;
 import company.DAO.*;
 import company.model.*;
 
@@ -13,9 +14,9 @@ public class FillConstantsUtil {
             IDAO dao;
 
             dao = new StatusDAO();
-            dao.add(new Status("pending"));
-            dao.add(new Status("accepted"));
-            dao.add(new Status("denied"));
+            dao.add(new Status(PENDING));
+            dao.add(new Status(ACCEPTED));
+            dao.add(new Status(DENIED));
 
             dao = new RoleDAO();
             dao.add(new Role("manager"));

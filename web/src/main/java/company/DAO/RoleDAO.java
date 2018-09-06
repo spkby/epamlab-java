@@ -7,6 +7,8 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
+import static company.Constants.*;
+
 public class RoleDAO extends SessionUtil implements IDAO<Role> {
 
     private Session session;
@@ -23,12 +25,12 @@ public class RoleDAO extends SessionUtil implements IDAO<Role> {
 
     @Override
     public void remove(int id) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(NO_METHOD);
     }
 
     @Override
     public void update(Role role) {
-        throw new IllegalStateException("no method");
+        throw new IllegalStateException(NO_METHOD);
     }
 
     @Override

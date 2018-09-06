@@ -4,20 +4,20 @@ import company.Security;
 
 import javax.servlet.annotation.WebFilter;
 
+import static company.Constants.*;
+
 @WebFilter("/holiday/*")
 public class HolidayFilter extends AbstractFilter {
 
-    private final static String EMPLOYEE = "employee";
-    private final static String VIEW = "view";
-    private final static String EDIT = "edit";
-    private final static String DELETE = "delete";
+    private static final String EMPLOYEE = "employee";
+    private static final String VIEW = "view";
 
     @Override
     protected boolean isLevelOK(String login, String path) {
 
         boolean isOK = false;
 
-        String[] array = path.split("/");
+        String[] array = path.split(SLASH);
 
         if (array.length == 2) return true;
 

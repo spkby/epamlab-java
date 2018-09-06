@@ -4,7 +4,6 @@ import company.Security;
 
 import javax.servlet.annotation.WebFilter;
 
-
 @WebFilter("/department/*")
 public class DepartmentFilter extends AbstractFilter {
 

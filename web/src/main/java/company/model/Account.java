@@ -2,6 +2,8 @@ package company.model;
 
 import javax.persistence.*;
 
+import static company.Constants.*;
+
 @Entity
 @Table(name = "account")
 public class Account {
@@ -42,10 +44,10 @@ public class Account {
 
     public void setLogin(String login) {
         if (login.isEmpty()) {
-            throw new IllegalArgumentException("Invalid account login: empty");
+            throw new IllegalArgumentException(INVALID_ACCOUNT_LOGIN + EMPTY);
         }
         if (login.length() > 20) {
-            throw new IllegalArgumentException("Invalid account login: length more 20");
+            throw new IllegalArgumentException(INVALID_ACCOUNT_LOGIN + LENGTH_MORE_20);
         }
         this.login = login;
     }
@@ -56,10 +58,10 @@ public class Account {
 
     public void setPass(String pass) {
         if (pass.isEmpty()) {
-            throw new IllegalArgumentException("Invalid account pass: empty");
+            throw new IllegalArgumentException(INVALID_ACCOUNT_PASS + EMPTY);
         }
         if (pass.length() > 20) {
-            throw new IllegalArgumentException("Invalid account pass: length more 20");
+            throw new IllegalArgumentException(INVALID_ACCOUNT_PASS + LENGTH_MORE_20);
         }
         this.pass = pass;
     }
@@ -70,7 +72,7 @@ public class Account {
 
     public void setEmployee(Employee employee) {
         if (employee == null) {
-            throw new IllegalArgumentException("Invalid account employee: null");
+            throw new IllegalArgumentException(INVALID_ACCOUNT_EMPLOYEE + STRING_NULL);
         }
         this.employee = employee;
     }

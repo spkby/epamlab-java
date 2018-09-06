@@ -2,6 +2,8 @@ package company.model;
 
 import javax.persistence.*;
 
+import static company.Constants.*;
+
 @Entity
 @Table(name = "salary")
 public class Salary {
@@ -34,7 +36,7 @@ public class Salary {
 
     public void setQuantity(int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Invalid salary quantity: non-positive, quantity: " + quantity);
+            throw new IllegalArgumentException(INVALID_SALARY_QUANTITY + NON_POSITIVE_QUANTITY + quantity);
         }
         this.quantity = quantity;
     }
