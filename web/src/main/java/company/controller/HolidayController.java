@@ -266,7 +266,7 @@ public class HolidayController extends AbstractController {
         }
 
         if (!isError) {
-            return "redirect:/holiday/view/" + holidayId;
+            return "redirect:/holiday/list/";
         } else {
             return "redirect:/holiday/edit/" + holidayId + "?error=" + errorMsg.toString();
         }

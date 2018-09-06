@@ -29,7 +29,7 @@ public class HolidayDAO extends SessionUtil implements IDAO<Holiday> {
 
         session = getSession();
 
-        Query query = session.createNativeQuery("DELETE from holiday WHERE id = ?1");
+        Query query = session.createNativeQuery("DELETE from holiday WHERE id = ?");
         query.setParameter(1, id);
         query.executeUpdate();
 
