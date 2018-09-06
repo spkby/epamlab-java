@@ -3,6 +3,8 @@ package company.model;
 import javax.persistence.*;
 import java.sql.Date;
 
+import static company.Constants.*;
+
 @Entity
 @Table(name = "holiday")
 public class Holiday {
@@ -63,7 +65,7 @@ public class Holiday {
 
     public void setEmployee(Employee employee) {
         if (employee == null) {
-            throw new IllegalArgumentException("Invalid holiday employee: null");
+            throw new IllegalArgumentException(INVALID_HOLIDAY_EMPLOYEE + STRING_NULL);
         }
         this.employee = employee;
     }
@@ -74,7 +76,7 @@ public class Holiday {
 
     public void setStatus(Status status) {
         if (status == null) {
-            throw new IllegalArgumentException("Invalid holiday status: null");
+            throw new IllegalArgumentException(INVALID_HOLIDAY_STATUS + STRING_NULL);
         }
         this.status = status;
     }

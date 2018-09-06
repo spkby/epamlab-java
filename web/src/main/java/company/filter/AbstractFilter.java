@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static company.Constants.*;
+
 public abstract class AbstractFilter extends HttpFilter {
 
     protected abstract boolean isLevelOK(String login, String path);
@@ -23,7 +25,7 @@ public abstract class AbstractFilter extends HttpFilter {
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("login")) {
+                if (cookie.getName().equals(LOGIN)) {
                     account = new AccountDAO().getAccountByLogin(cookie.getValue());
                     if (account != null) {
                         isLogged = true;
@@ -37,8 +39,8 @@ public abstract class AbstractFilter extends HttpFilter {
             chain.doFilter(req, res);
         } else {
             res.setStatus(401);
-            res.getWriter().println("Forbidden");
-            res.sendRedirect("/login");
+            res.getWriter().println(FORBIDDEN);
+            req.getRequestDispatcher("/login").forward(req, res);
         }
     }
 

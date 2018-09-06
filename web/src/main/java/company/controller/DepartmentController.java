@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import static company.Constants.*;
+
 @Controller
 public class DepartmentController extends AbstractController {
 
@@ -18,11 +20,11 @@ public class DepartmentController extends AbstractController {
     }
 
     @GetMapping("/department/list")
-    public String list(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
+    public String list(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
 
         model = accountForJSP(login, model);
 
-        model.addAttribute("departments", new DepartmentDAO().getList());
+        model.addAttribute(DEPARTMENTS, new DepartmentDAO().getList());
         return "department/list";
     }
 
@@ -32,17 +34,22 @@ public class DepartmentController extends AbstractController {
     }
 
     @GetMapping("/department/view/")
-    public String view(@CookieValue(value = "login", defaultValue = "") String login, Model model) {
-
+    public String view(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login) {
         return "redirect:/department/view/" + new AccountDAO().getAccountByLogin(login).getEmployee().getDepartment().getId();
     }
 
     @GetMapping("/department/view/{id}")
-    public String viewById(@CookieValue(value = "login", defaultValue = "") String login, @PathVariable(value = "id") int id, Model model) {
+    public String viewById(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login,
+                           @PathVariable(value = ID) int id, Model model) {
 
         model = accountForJSP(login, model);
 
-        model.addAttribute("employees", new EmployeeDAO().getListByDepartment(id));
+        if (new DepartmentDAO().getById(id) == null) {
+            model.addAttribute(ERROR, true);
+            model.addAttribute("error_message", "Department with ID '" + id + "' not found");
+        } else {
+            model.addAttribute(EMPLOYEES, new EmployeeDAO().getListByDepartment(id));
+        }
         return "employee/list";
     }
 }
