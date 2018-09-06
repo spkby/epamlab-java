@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static company.Constants.*;
 
-
 @Controller
 public class HolidayController extends AbstractController {
 
@@ -53,10 +52,6 @@ public class HolidayController extends AbstractController {
 
         model = accountForJSP(login, model);
 
-       /* if (!Security.checkLoginToEmployeeId(login, id)) {
-            return "redirect:/login";
-        }*/
-
         model.addAttribute(ACCOUNT, accountDAO.getById(id));
 
         model.addAttribute(HOLIDAYS, holidayDAO.getListByEmployee(new EmployeeDAO().getById(id)));
@@ -85,10 +80,6 @@ public class HolidayController extends AbstractController {
                            @PathVariable(value = ID) int id, Model model) {
         model = accountForJSP(login, model);
 
-/*        if (!Security.checkLoginToHolidayIdToView(login, id)) {
-            return "redirect:/login";
-        }*/
-
         model.addAttribute(HOLIDAY, holidayDAO.getById(id));
         return "holiday/view";
     }
@@ -107,24 +98,12 @@ public class HolidayController extends AbstractController {
                               @RequestParam(value = DATE_TO) String dateTo) {
 
         boolean isError = false;
-        StringBuilder errorMsg = new StringBuilder();
-
-
+        StringBuffer errorMsg = new StringBuffer();
         Holiday holiday = new Holiday();
+
         try {
 
-            if (Utils.dateIsMoreThanToday(dateFrom)) {
-                isError = true;
-                errorMsg.append(DATE_FROM_BEFORE_TODAY);
-            }
-
-            if (Utils.dateTwoIsMoreThanDateOne(dateFrom, dateTo)) {
-                isError = true;
-                if (errorMsg.length() == 0) {
-                    errorMsg.append(SPACE);
-                }
-                errorMsg.append(DATE_TO_BEFORE_FROM);
-            }
+            isError = isWrongDateToOrDateFrom(dateFrom, dateTo, errorMsg);
 
             if (!isError) {
                 holiday.setDateFrom(Utils.getDate(dateFrom));
@@ -152,13 +131,26 @@ public class HolidayController extends AbstractController {
 
         model = accountForJSP(login, model);
 
-/*        if (!Security.checkLoginToHolidayId(login, id)) {
-            return "redirect:/login";
-        }*/
-
         model.addAttribute(HOLIDAY, holidayDAO.getById(id));
 
         return "/holiday/edit";
+    }
+
+    private static boolean isWrongDateToOrDateFrom(String dateFrom, String dateTo, StringBuffer errorMsg) {
+        boolean isWrong = false;
+        if (Utils.dateIsMoreThanToday(dateFrom)) {
+            isWrong = true;
+            errorMsg.append(DATE_FROM_BEFORE_TODAY);
+        }
+
+        if (Utils.dateTwoIsMoreThanDateOne(dateFrom, dateTo)) {
+            isWrong = true;
+            if (errorMsg.length() == 0) {
+                errorMsg.append(SPACE);
+            }
+            errorMsg.append(DATE_TO_BEFORE_FROM);
+        }
+        return isWrong;
     }
 
     @PostMapping("/holiday/edit")
@@ -168,28 +160,13 @@ public class HolidayController extends AbstractController {
                                @RequestParam(value = HOLIDAY_ID) String id) {
 
         int holidayId = Integer.parseInt(id);
-/*
-        if (!Security.checkLoginToHolidayId(login, holidayId)) {
-            return "redirect:/login";
-        }*/
 
         Holiday holiday = null;
         boolean isError = false;
-        StringBuilder errorMsg = new StringBuilder();
+        StringBuffer errorMsg = new StringBuffer();
 
         try {
-            if (Utils.dateIsMoreThanToday(dateFrom)) {
-                isError = true;
-                errorMsg.append(DATE_FROM_BEFORE_TODAY);
-            }
-
-            if (Utils.dateTwoIsMoreThanDateOne(dateFrom, dateTo)) {
-                isError = true;
-                if (errorMsg.length() == 0) {
-                    errorMsg.append(SPACE);
-                }
-                errorMsg.append(DATE_TO_BEFORE_FROM);
-            }
+            isError = isWrongDateToOrDateFrom(dateFrom, dateTo, errorMsg);
 
             holiday = holidayDAO.getById(holidayId);
             holiday.setDateFrom(Utils.getDate(dateFrom));
@@ -210,9 +187,7 @@ public class HolidayController extends AbstractController {
     }
 
     @GetMapping("/holiday/delete")
-    public String getDelete(@CookieValue(value = LOGIN, defaultValue = NO_SPACE) String login, Model model) {
-
-        model = accountForJSP(login, model);
+    public String getDelete() {
 
         return "error";
     }
@@ -226,9 +201,9 @@ public class HolidayController extends AbstractController {
 
     private static String changeStatus(int id, Status status, String login) {
 
-/*        if (!(Security.getRoleId(login) == Security.RoleId.MANAGER || Security.getRoleId(login) == Security.RoleId.LEAD)) {
+        if (!(Security.getRoleId(login) == Security.RoleId.MANAGER || Security.getRoleId(login) == Security.RoleId.LEAD)) {
             return "redirect:/login";
-        }*/
+        }
 
         Holiday holiday = holidayDAO.getById(id);
         holiday.setStatus(status);
